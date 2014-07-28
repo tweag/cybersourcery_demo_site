@@ -1,10 +1,16 @@
-= simple_form_for @profile, html: { class: 'form-horizontal' }, role: 'form' do |f|
+= simple_form_for @profile,
+  html: { class: 'form-horizontal' },
+  role: 'form',
+  wrapper: :horizontal_form,
+  wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+
   = f.error_notification
 
   = f.input :name
-  = f.input :service
+  = f.input :service, as: :radio_buttons, collection: ['test', 'live']
   = f.input :profile_id
   = f.input :access_key
   = f.input :secret_key
-
-  = f.button :submit, class: 'btn btn-primary'
+  .form-group
+    .col-sm-offset-3.col-sm-9
+      = f.button :submit, class: 'btn btn-primary'
