@@ -50,7 +50,6 @@ gem 'autoprefixer-rails'
 gem 'simple_form'
 
 group :test, :development do
-  gem 'capybara'
-  gem 'capybara-webkit'
-  gem 'rspec-rails'
+  gem 'capybara', '~> 2.4.1'
+  gem 'rspec-rails', '~> 3.0.0'
 end
