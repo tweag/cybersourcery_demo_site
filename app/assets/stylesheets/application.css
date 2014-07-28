@@ -15,9 +15,3 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-/* alert-error was renamed to alert-danger in Bootstrap, but simple_form still uses .alert-error */
-.alert-error {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
-}
