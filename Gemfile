@@ -44,10 +44,10 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'slim-rails'
+gem 'slim-rails', '~> 2.1.5'
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
-gem 'simple_form'
+gem 'simple_form', '~> 3.1.0.rc2'
 
 group :test, :development do
   gem 'capybara', '~> 2.4.1'
