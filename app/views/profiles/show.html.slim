@@ -1,23 +1,27 @@
-#notice.alert.alert-success
-  a class="close" data-dismiss="alert" x
-  = notice
+.row
+  .col-xs-6.col-xs-offset-2
+    h1
+      = @profile.name
 
-p
-  strong Name:
-  = @profile.name
-p
-  strong Service:
-  = @profile.service
-p
-  strong Profile:
-  = @profile.profile_id
-p
-  strong Access key:
-  = @profile.access_key
-p
-  strong Secret key:
-  = @profile.secret_key
+    - if notice.present?
+      #notice.alert.alert-success
+        a class="close" data-dismiss="alert" x
+        = notice
 
-= link_to 'Edit', edit_profile_path(@profile)
-'|
-= link_to 'Back', profiles_path
+    p
+      strong> Service:
+      = @profile.service
+    p
+      strong> Profile:
+      = @profile.profile_id
+    p
+      strong> Access key:
+      = @profile.access_key
+    p
+      strong> Secret key:
+      = @profile.secret_key
+
+    = link_to 'Edit', edit_profile_path(@profile)
+    ='
+    '|
+    = link_to 'Back', profiles_path

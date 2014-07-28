@@ -1,12 +1,10 @@
-= simple_form_for @profile, html: { class: 'well form-horizontal' } do |f|
+= simple_form_for @profile, html: { class: 'form-horizontal' }, role: 'form' do |f|
   = f.error_notification
 
-  .form-inputs
-    = f.input :name
-    = f.input :service
-    = f.input :profile_id
-    = f.input :access_key
-    = f.input :secret_key
+  = f.input :name
+  = f.input :service
+  = f.input :profile_id
+  = f.input :access_key
+  = f.input :secret_key
 
-  .form-actions
-    = f.button :submit
+  = f.button :submit, class: 'btn btn-primary'
