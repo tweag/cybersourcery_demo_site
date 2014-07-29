@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.4'
 
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+#gem 'sqlite3'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
@@ -48,8 +48,15 @@ gem 'slim-rails', '~> 2.1.5'
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 gem 'simple_form', '~> 3.1.0.rc2'
+gem 'pg', '~> 0.17.1'
+
+group :production do
+  gem 'rails_12factor'
+end
 
 group :test, :development do
   gem 'capybara', '~> 2.4.1'
   gem 'rspec-rails', '~> 3.0.0'
 end
+
+ruby '2.0.0'
