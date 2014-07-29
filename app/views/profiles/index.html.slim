@@ -8,7 +8,6 @@
         th Service
         th Profile
         th Access key
-        th Secret key
         th
         th
         th
@@ -19,7 +18,6 @@
           td = profile.service
           td = profile.profile_id
           td = profile.access_key
-          td = profile.secret_key
           td = link_to 'Show', profile
           td = link_to 'Edit', edit_profile_path(profile)
           td = link_to 'Destroy', profile, data: {:confirm => 'Are you sure?'}, :method => :delete
