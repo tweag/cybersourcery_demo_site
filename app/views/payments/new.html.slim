@@ -1,0 +1,91 @@
+.row
+  .col-xs-6.col-xs-offset-2
+    h1 New payment
+
+    = form_tag @profile.transaction_url, method: :post, class: 'form-horizontal', id: 'payment_form' do |f|
+
+      = hidden_field_tag 'card_expiry_date'
+      = hidden_field_tag 'amount', 100
+
+      fieldset
+        legend Credit Card Information
+
+        .form-group.required
+          = label_tag 'bill_to_forename', 'First Name', class: 'col-sm-4 control-label required'
+          .col-sm-8
+            = text_field_tag 'bill_to_forename', params[:req_bill_to_forename], required: true, class: 'required form-control'
+
+        .form-group.required
+          = label_tag 'bill_to_surname', 'Last Name', class: 'col-sm-4 control-label required'
+          .col-sm-8
+            = text_field_tag 'bill_to_surname', params[:req_bill_to_surname], required: true, class: 'required form-control'
+
+        .form-group.required
+          = label_tag 'card_number', 'Card Number', class: 'col-sm-4 control-label required'
+          .col-sm-8
+            = text_field_tag 'card_number', nil, required: true, class: 'required form-control'
+
+        .form-group.required
+          = label_tag 'card_expiry_month', 'Expiration', class: 'col-sm-4 control-label required'
+          .col-sm-8
+            = select_tag 'card_expiry_month', options_for_select(card_expiry_months), { class: 'required form-control card-expiry' }
+            ='
+            |/
+            ='
+            = select_tag 'card_expiry_year', options_for_select(card_expiry_years), { class: 'required form-control card-expiry' }
+
+        .form-group.required
+          = label_tag 'card_cvn', 'Security Code', class: 'col-sm-4 control-label required'
+          .col-sm-4
+            = text_field_tag 'card_cvn', nil, class: 'input-small required form-control', pattern: "^[0-9]+$"
+
+        .form-group.required
+          = label_tag 'card_type', 'Card Type', class: 'col-sm-4 control-label required'
+          .col-sm-4
+            = select_tag 'card_type', options_for_select(card_types), { include_blank: true, class: 'required form-control' }
+
+      fieldset
+        legend Billing Address
+
+        .form-group.required
+          = label_tag 'bill_to_email', 'Email', class: 'col-sm-4 control-label required'
+          .col-sm-8
+            = text_field_tag 'bill_to_email', params[:req_bill_to_email], required: true, class: 'required form-control', pattern: '[^@]+@[^@]+\.[a-zA-Z]{2,6}'
+
+        .form-group.required
+          = label_tag 'bill_to_address_country', 'Country', class: 'col-sm-4 control-label required'
+          .col-sm-8
+            = select_tag 'bill_to_address_country', options_for_select(countries, (params[:req_bill_to_address_country].present? ? params[:req_bill_to_address_country] : 'US')), { class: 'required form-control' }
+
+        .form-group.required
+          = label_tag 'bill_to_address_line1', 'Street Address (line 1)', class: 'col-sm-4 control-label required'
+          .col-sm-8
+            = text_field_tag 'bill_to_address_line1', params[:req_bill_to_address_line1], required: true, class: 'required form-control'
+
+        .form-group
+          = label_tag 'bill_to_address_line2', 'Street Address (line 2)', class: 'col-sm-4 control-label'
+          .col-sm-8
+            = text_field_tag 'bill_to_address_line2', params[:req_bill_to_address_line2], class: 'form-control'
+
+        .form-group.required
+          = label_tag 'bill_to_address_city', 'City', class: 'col-sm-4 control-label required'
+          .col-sm-8
+            = text_field_tag 'bill_to_address_city', params[:req_bill_to_address_city], required: true, class: 'required form-control'
+
+        .form-group.required
+          = label_tag 'bill_to_address_state', 'State (Province)', class: 'col-sm-4 control-label required'
+          .col-sm-8
+            = select_tag 'bill_to_address_state', options_for_select(us_states, params[:req_bill_to_address_state]), { include_blank: true, class: 'required form-control' }
+
+        .form-group.required
+          = label_tag 'bill_to_address_postal_code', 'Zip (Postal Code)', class: 'col-sm-4 control-label required'
+          .col-sm-4
+            = text_field_tag 'bill_to_address_postal_code', params[:req_bill_to_address_postal_code], required: true, class: 'required form-control'
+
+      .form-group
+        .col-sm-8.col-sm-offset-4
+          = submit_tag 'Submit', class: 'btn btn-primary', data: { disable_with: "Please wait.." }
+
+form#templates
+  = select_tag 'bill_to_address_state', options_for_select(us_states), { include_blank: true, class: 'required form-control', id: 'bill_to_address_state_select_template' }
+  = text_field_tag 'bill_to_address_state', nil, id: 'bill_to_address_state_text_template', required: true, class: 'required form-control'
