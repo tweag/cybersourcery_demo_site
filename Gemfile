@@ -45,13 +45,13 @@ end
 # gem 'debugger', group: [:development, :test]
 
 gem 'slim-rails', '~> 2.1.5'
-gem 'bootstrap-sass'
-gem 'autoprefixer-rails'
+gem 'bootstrap-sass', '~> 3.2.0.1'
+gem 'autoprefixer-rails', '~> 2.2.0.20140727'
 gem 'simple_form', '~> 3.1.0.rc2'
 gem 'pg', '~> 0.17.1'
 
 group :production do
-  gem 'rails_12factor'
+  gem 'rails_12factor', '~> 0.0.2'
 end
 
 group :test, :development do
