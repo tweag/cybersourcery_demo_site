@@ -49,6 +49,7 @@ gem 'bootstrap-sass', '~> 3.2.0.1'
 gem 'autoprefixer-rails', '~> 2.2.0.20140727'
 gem 'simple_form', '~> 3.1.0.rc2'
 gem 'pg', '~> 0.17.1'
+gem 'ruby-hmac', '~> 0.4.0'
 
 group :production do
   gem 'rails_12factor', '~> 0.0.2'
