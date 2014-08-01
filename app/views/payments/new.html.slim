@@ -7,6 +7,9 @@
       = hidden_field_tag 'card_expiry_date'
       = hidden_field_tag 'amount', 100
 
+      - @signed_form_data.each do |key, value|
+        = hidden_field_tag key, value
+
       fieldset
         legend Credit Card Information
 
