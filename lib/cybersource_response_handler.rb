@@ -67,7 +67,7 @@ class CybersourceResponseHandler < Struct.new(:params, :cybersource_signer)
   def return_url
     # TODO: probably set this in the profile
     #log.return_url.presence || raise('The return URL is not set')
-    response_path
+    '/responses'
   end
 
   private
