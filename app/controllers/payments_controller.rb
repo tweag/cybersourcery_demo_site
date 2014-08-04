@@ -1,4 +1,6 @@
 class PaymentsController < ApplicationController
+  skip_before_filter :verify_authenticity_token, only: :create
+
   def new
     # TODO: may need to determine this dynamically in some fashion
     @profile = Profile.find_by(access_key: '839d4d3b1cef3e04bd2981997714803b')
