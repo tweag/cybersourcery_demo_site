@@ -1,5 +1,5 @@
 class ResponsesController < ApplicationController
-  def show
+  def index
 
   end
 end
