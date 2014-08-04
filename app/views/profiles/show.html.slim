@@ -2,12 +2,6 @@
   .col-xs-6.col-xs-offset-2
     h1
       = @profile.name
-
-    - if notice.present?
-      #notice.alert.alert-success
-        a class="close" data-dismiss="alert" x
-        = notice
-
     p
       strong> Service:
       = @profile.service

@@ -31,7 +31,10 @@ class ProfilesController < ApplicationController
         format.html { redirect_to @profile, notice: 'Profile was successfully created.' }
         format.json { render action: 'show', status: :created, location: @profile }
       else
-        format.html { render action: 'new' }
+        format.html do
+          flash.now[:alert] = @profile.errors.full_messages.to_sentence
+          render action: 'new'
+        end
         format.json { render json: @profile.errors, status: :unprocessable_entity }
       end
     end
@@ -45,7 +48,10 @@ class ProfilesController < ApplicationController
         format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html do
+          flash.now[:alert] = @profile.errors.full_messages.to_sentence
+          render action: 'edit'
+        end
         format.json { render json: @profile.errors, status: :unprocessable_entity }
       end
     end
