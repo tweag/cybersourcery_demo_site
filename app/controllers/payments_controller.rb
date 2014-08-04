@@ -13,7 +13,8 @@ class PaymentsController < ApplicationController
   # settings (or show them a custom message?)
   def create
     profile = Profile.find_by(access_key: '839d4d3b1cef3e04bd2981997714803b')
-    response_handler = CybersourceResponseHandler.new(params, profile)
+    signer = CybersourceSigner.new(profile)
+    response_handler = CybersourceResponseHandler.new(params, signer)
     redirect_to response_handler.run
   rescue Exception => e
     flash.now[:alert] = e.message
