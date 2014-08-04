@@ -21,7 +21,6 @@ class CybersourceSigner
     card_expiry_date
     card_number
     card_type
-    commit
   ]
 
   def initialize(profile, signer = Signer)
@@ -33,6 +32,7 @@ class CybersourceSigner
       payment_method:       "card",
       locale:               "en",
       transaction_type:     "sale",
+      amount:               "100", # TODO: the amount must be signed, but we obviously don't want it here
       currency:             "USD"
     }
   end
