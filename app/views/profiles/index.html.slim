@@ -13,7 +13,7 @@
         th
 
       - @profiles.each do |profile|
-        tr
+        tr id="profile_#{profile.id}"
           td = profile.name
           td = profile.service
           td = profile.profile_id

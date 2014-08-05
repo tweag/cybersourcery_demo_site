@@ -68,13 +68,19 @@ class ProfilesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_profile
       @profile = Profile.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def profile_params
-      params.require(:profile).permit(:name, :service, :profile_id, :access_key, :secret_key)
+      params.require(:profile).permit(
+        :name,
+        :service,
+        :profile_id,
+        :access_key,
+        :secret_key,
+        :return_url,
+        :transaction_type
+      )
     end
 end
