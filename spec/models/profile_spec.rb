@@ -5,12 +5,15 @@ describe Profile do
     FactoryGirl.build_stubbed :profile
   end
 
-  describe 'validates_inclusion_of :service' do
-    it 'disallows values for self.service other than "live" and "test"' do
-      profile.service = 'foo'
-      expect(profile).to_not be_valid
-    end
-  end
+  it { should accept_values_for(:service, 'live', 'test') }
+  it { should_not accept_values_for(:service, nil, 'foo') }
+
+  it { should_not accept_values_for(:name, nil) }
+  it { should_not accept_values_for(:profile_id, nil) }
+  it { should_not accept_values_for(:access_key, nil) }
+  it { should_not accept_values_for(:secret_key, nil) }
+  it { should_not accept_values_for(:return_url, nil) }
+  it { should_not accept_values_for(:transaction_type, nil) }
 
   describe '#transaction_url' do
     it 'returns the "live" mode Cybersource transaction URL' do

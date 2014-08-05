@@ -1,6 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    accept_values_for (0.7.1)
+      activemodel (>= 3, < 5)
+      rspec (>= 2.0, < 4.0)
     actionmailer (4.0.4)
       actionpack (= 4.0.4)
       mail (~> 2.5.4)
@@ -100,6 +103,10 @@ GEM
     rake (10.3.2)
     rdoc (4.1.1)
       json (~> 1.4)
+    rspec (3.0.0)
+      rspec-core (~> 3.0.0)
+      rspec-expectations (~> 3.0.0)
+      rspec-mocks (~> 3.0.0)
     rspec-core (3.0.3)
       rspec-support (~> 3.0.0)
     rspec-expectations (3.0.3)
@@ -173,6 +180,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  accept_values_for (~> 0.7.1)
   autoprefixer-rails (~> 2.2.0.20140727)
   bootstrap-sass (~> 3.2.0.1)
   capybara (~> 2.4.1)

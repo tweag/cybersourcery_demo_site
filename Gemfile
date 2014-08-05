@@ -60,6 +60,10 @@ group :test, :development do
   gem 'selenium-webdriver', '~> 2.42.0'
   gem 'rspec-rails', '~> 3.0.0'
   gem 'factory_girl_rails', '~> 4.4.1'
+end
+
+group :test do
+  gem 'accept_values_for', '~> 0.7.1'
   gem 'database_cleaner', '~> 1.3.0'
 end
 
