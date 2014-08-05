@@ -9,6 +9,8 @@
   = f.input :profile_id
   = f.input :access_key
   = f.input :secret_key
+  = f.input :return_url
+  = f.input :transaction_type, collection: transaction_types, prompt: 'Please select...'
   .form-group
     .col-sm-offset-3.col-sm-9
       = f.button :submit, class: 'btn btn-primary'

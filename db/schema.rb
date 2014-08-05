@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140728083433) do
+ActiveRecord::Schema.define(version: 20140804112417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,8 @@ ActiveRecord::Schema.define(version: 20140728083433) do
     t.text     "secret_key"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "return_url"
+    t.string   "transaction_type"
   end
 
 end
