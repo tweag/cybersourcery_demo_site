@@ -3,6 +3,10 @@
   display: inline;
 }
 
+#payment_card_cvn, #payment_card_type, #payment_bill_to_address_postal_code {
+  width: 17em;
+}
+
 #templates {
   display: none;
 }

@@ -316,30 +316,4 @@ module PaymentsHelper
       'Discover' => '004'
     }
   end
-
-  # how it's done: http://baymard.com/blog/how-to-format-expiration-date-fields
-  def card_expiry_months
-    {
-      "Month" => "",
-      "01" => "01",
-      "02" => "02",
-      "03" => "03",
-      "04" => "04",
-      "05" => "05",
-      "06" => "06",
-      "07" => "07",
-      "08" => "08",
-      "09" => "09",
-      "10" => "10",
-      "11" => "11",
-      "12" => "12"
-    }
-  end
-
-  # we'll go with a 20 year range - that's what Amazon does
-  def card_expiry_years(now = Time.now)
-    years = [*now.year..(now.year + 19)]
-    years_hash = { "Year" => "" }
-    years_hash.merge! Hash[years.zip years]
-  end
 end
