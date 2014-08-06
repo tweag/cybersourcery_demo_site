@@ -6,10 +6,9 @@
         url: @payment.form_action_url,
         html: { class: 'form-horizontal' },
         role: 'form',
-        wrapper: :horizontal_form,
-        wrapper_mappings: { radio_buttons: :horizontal_radio_and_checkboxes } do |f|
+        wrapper: :horizontal_form do |f|
 
-      = @payment.hidden_input f, :card_expiry_date
+      = @payment.hidden_input f, :card_expiry_date, value: 'foo'
 
       - @payment.signed_form_data.each do |field, value|
         = @payment.hidden_input f, field, value
@@ -20,11 +19,17 @@
         = @payment.simple_form_input f, :bill_to_forename
         = @payment.simple_form_input f, :bill_to_surname
         = @payment.simple_form_input f, :card_number
-        = f.input :card_expiry_date, label: @payment.field_label(:card_expiry_date) do
-          = f.date_select :card_expiry_date, { discard_day: true, order: [:month, :year], start_year: Date.today.year, end_year:  (Date.today.year+20), use_two_digit_numbers: true, date_separator: ' / ', prompt: true }, { :class => 'select required form-control card-expiry' }
+        = f.input :card_expiry_dummy, label: @payment.field_label(:card_expiry_dummy) do
+          = f.date_select :card_expiry_dummy,
+            { discard_day: true, order: [:month, :year],
+              start_year: Date.today.year,
+              end_year:  (Date.today.year + 19),
+              use_two_digit_numbers: true,
+              date_separator: ' / ',
+              prompt: true },
+            { :class => 'select required form-control card-expiry' }
         = @payment.simple_form_input f, :card_cvn
-        = @payment.simple_form_select f, :card_type, card_types, nil, 'Please select...'
-
+        = @payment.simple_form_select f, :card_type, card_types, nil, true
 
       fieldset
         legend Billing Address
@@ -34,7 +39,7 @@
         = @payment.simple_form_input f, :bill_to_address_line1
         = @payment.simple_form_input f, :bill_to_address_line2
         = @payment.simple_form_input f, :bill_to_address_city
-        = @payment.simple_form_select f, :bill_to_address_state, us_states, nil, 'Please select...'
+        = @payment.simple_form_select f, :bill_to_address_state, us_states, nil, true
         = @payment.simple_form_input f, :bill_to_address_postal_code
 
       .form-group
