@@ -2,8 +2,7 @@ class PaymentsController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: :create
 
   def new
-    # TODO: determine the Profile dynamically in some fashion
-    profile = Profile.find_by(access_key: '839d4d3b1cef3e04bd2981997714803b')
+    profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
     @payment = Payment.new(signer, profile)
   end
@@ -12,14 +11,14 @@ class PaymentsController < ApplicationController
   # TODO: We will check for errors, provide logging hooks, and redirect the user per the profile
   # settings (or show them a custom message?)
   def create
-    profile = Profile.find_by(access_key: '839d4d3b1cef3e04bd2981997714803b')
+    profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
     response_handler = CybersourceResponseHandler.new(params, signer)
     redirect_to response_handler.run
   rescue Exception => e
     flash.now[:alert] = e.message
-    @profile = Profile.find_by(access_key: '839d4d3b1cef3e04bd2981997714803b')
-    signer = CybersourceSigner.new(@profile)
+    profile = CybersourceProfile.new('pwksgem')
+    signer = CybersourceSigner.new(profile)
     @signed_form_data = signer.signed_form_data
     render :new
   end
