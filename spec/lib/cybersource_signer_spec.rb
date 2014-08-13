@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe CybersourceSigner do
   let(:profile) do
-    Profile.new(
+    CybersourceProfile.new(
       name: 'Admissions Acceptance Fee',
       service: 'test',
       profile_id: 'acptfee',
