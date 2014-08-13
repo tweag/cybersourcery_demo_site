@@ -19,7 +19,7 @@ feature 'Profiles' do
       fill_in 'profile_return_url', with: 'http://tranquil-ocean-5865.herokuapp.com/responses'
       select 'sale', from: 'profile_transaction_type'
       click_button 'Create Profile'
-    }.to change(Profile, :count).by(1)
+    }.to change(CybersourceProfile, :count).by(1)
 
     expect(page).to have_content 'Profile was successfully created'
     within 'h1' do
