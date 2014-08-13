@@ -8,7 +8,7 @@
         role: 'form',
         wrapper: :horizontal_form do |f|
 
-      = @payment.hidden_input f, :card_expiry_date, value: 'foo'
+      = @payment.hidden_input f, :card_expiry_date
 
       - @payment.signed_form_data.each do |field, value|
         = @payment.hidden_input f, field, value
