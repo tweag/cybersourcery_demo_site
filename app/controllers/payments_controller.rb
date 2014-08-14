@@ -17,6 +17,7 @@ class PaymentsController < ApplicationController
     response_handler = CybersourceResponseHandler.new(params, signer)
     redirect_to response_handler.run
   rescue Exception => e
+    Rails.logger.debug params.to_yaml
     flash.now[:alert] = e.message
     profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
