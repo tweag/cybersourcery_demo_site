@@ -51,4 +51,3 @@ form#templates
   = select_tag 'bill_to_address_state', options_for_select(us_states), { prompt: 'Please select...', class: 'select required form-control', id: 'payment_bill_to_address_state_select_template' }
   = text_field_tag 'bill_to_address_state', nil, id: 'payment_bill_to_address_state_input_template', class: 'string required form-control'
 
-= debug params
