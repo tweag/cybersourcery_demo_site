@@ -38,8 +38,8 @@ class Payment
     @signer.signed_form_data
   end
 
-  def simple_form_input(form, field)
-    form.input field, label: field_label(field), input_html: { name: field.to_s }
+  def simple_form_input(form, field, value = nil)
+    form.input field, label: field_label(field), input_html: { name: field.to_s, value: value }
   end
 
   def simple_form_select(form, field, collection, selected = nil, prompt = nil)

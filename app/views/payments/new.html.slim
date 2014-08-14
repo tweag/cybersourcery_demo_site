@@ -16,8 +16,8 @@
       fieldset
         legend Credit Card Information
 
-        = @payment.simple_form_input f, :bill_to_forename
-        = @payment.simple_form_input f, :bill_to_surname
+        = @payment.simple_form_input f, :bill_to_forename, request[:bill_to_forename]
+        = @payment.simple_form_input f, :bill_to_surname, request[:bill_to_surname]
         = @payment.simple_form_input f, :card_number
         = f.input :card_expiry_dummy, label: @payment.field_label(:card_expiry_dummy) do
           = f.date_select :card_expiry_dummy,
@@ -35,13 +35,13 @@
       fieldset
         legend Billing Address
 
-        = @payment.simple_form_input f, :bill_to_email
-        = @payment.simple_form_select f, :bill_to_address_country, countries, 'US'
-        = @payment.simple_form_input f, :bill_to_address_line1
-        = @payment.simple_form_input f, :bill_to_address_line2
-        = @payment.simple_form_input f, :bill_to_address_city
-        = @payment.simple_form_select f, :bill_to_address_state, us_states, nil, true
-        = @payment.simple_form_input f, :bill_to_address_postal_code
+        = @payment.simple_form_input f, :bill_to_email, request[:bill_to_email]
+        = @payment.simple_form_select f, :bill_to_address_country, countries, (request[:bill_to_address_country].present? ? request[:bill_to_address_country] : 'US')
+        = @payment.simple_form_input f, :bill_to_address_line1, request[:bill_to_address_line1]
+        = @payment.simple_form_input f, :bill_to_address_line2, request[:bill_to_address_line2]
+        = @payment.simple_form_input f, :bill_to_address_city, request[:bill_to_address_city]
+        = @payment.simple_form_select f, :bill_to_address_state, us_states, request[:bill_to_address_state], true
+        = @payment.simple_form_input f, :bill_to_address_postal_code, request[:bill_to_address_postal_code]
 
       .form-group
         .col-sm-offset-3.col-sm-9
@@ -51,4 +51,3 @@ form#templates
   = select_tag 'bill_to_address_state', options_for_select(us_states), { prompt: 'Please select...', class: 'select required form-control', id: 'payment_bill_to_address_state_select_template' }
   = text_field_tag 'bill_to_address_state', nil, id: 'payment_bill_to_address_state_input_template', class: 'string required form-control'
 
-= debug request
