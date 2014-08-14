@@ -21,7 +21,8 @@
         = @payment.simple_form_input f, :card_number
         = f.input :card_expiry_dummy, label: @payment.field_label(:card_expiry_dummy) do
           = f.date_select :card_expiry_dummy,
-            { discard_day: true, order: [:month, :year],
+            { discard_day: true,
+              order: [:month, :year],
               start_year: Date.today.year,
               end_year:  (Date.today.year + 19),
               use_two_digit_numbers: true,
