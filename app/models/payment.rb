@@ -14,8 +14,8 @@ class Payment
                 :bill_to_address_city, :bill_to_address_state, :bill_to_address_postal_code
   validates_presence_of :bill_to_forename, :bill_to_surname, :card_number, :card_expiry_date,
                         :card_expiry_dummy, :card_expiry_month, :card_expiry_year, :card_cvn,
-                        :card_type, :bill_to_email, :bill_to_address_line1, :bill_to_address_state,
-                        :bill_to_address_postal_code
+                        :card_type, :bill_to_email, :bill_to_address_line1, :bill_to_address_city,
+                        :bill_to_address_state, :bill_to_address_postal_code
 
   # To keep ActiveModel::Conversion happy
   def persisted?
@@ -38,7 +38,7 @@ class Payment
     @signer.signed_form_data
   end
 
-  def simple_form_input(form, field, value = nil)
+  def simple_form_input(form, field, value = nil, required = true)
     form.input field, label: field_label(field), input_html: { name: field.to_s, value: value }
   end
 
