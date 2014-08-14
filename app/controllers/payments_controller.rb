@@ -1,5 +1,6 @@
 class PaymentsController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: :create
+  before_action :normalize_cybersource_params, only: :create
 
   def new
     profile = CybersourceProfile.new('pwksgem')
@@ -22,4 +23,13 @@ class PaymentsController < ApplicationController
     @payment = Payment.new(signer, profile)
     render :new
   end
+
+  private
+
+  def normalize_cybersource_params
+    params.keys.each do |key|
+      params[key[4..-1]] = params[key] if key =~ /^req_/
+    end
+  end
+
 end
