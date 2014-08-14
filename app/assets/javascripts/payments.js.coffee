@@ -15,3 +15,8 @@ $ ->
   # populate the card_expiry_date field from the expiry month and year
   $('#new_payment').submit ->
     $('#payment_card_expiry_date').val($('#payment_card_expiry_dummy_2i').val() + '-' + $('#payment_card_expiry_dummy_1i').val())
+    # Cybersource generally ignores fields its not expecting, but sending arrays it's not expecting
+    # causes a 500 server error, so remove the payment[card_expiry_dummy] fields!
+    $('#payment_card_expiry_dummy_3i').remove()
+    $('#payment_card_expiry_dummy_2i').remove()
+    $('#payment_card_expiry_dummy_1i').remove()
