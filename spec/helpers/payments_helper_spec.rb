@@ -24,22 +24,4 @@ describe PaymentsHelper do
       expect(card_types.any? { |k,v| k == 'American Express' && v == '003' }).to be true
     end
   end
-
-  describe '#card_expiry_months' do
-    it 'returns a hash of numeric months' do
-      months = helper.card_expiry_months
-      expect(months.size).to eq 13
-      expect(months.first).to eq ['Month', '']
-      expect(months.any? { |k,v| k == '06' && v == '06' }).to be true
-    end
-  end
-
-  describe '#card_expiry_years' do
-    it 'returns a hash of 20 upcoming years' do
-      years = helper.card_expiry_years('2014-06-07'.to_time)
-      expect(years.size).to eq 21
-      expect(years.first).to eq ['Year', '']
-      expect(years.any? { |k,v| k == 2015 && v == 2015 }).to be true
-    end
-  end
 end
