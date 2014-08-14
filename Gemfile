@@ -63,7 +63,6 @@ group :test, :development do
 end
 
 group :test do
-  gem 'accept_values_for', '~> 0.7.1'
   gem 'database_cleaner', '~> 1.3.0'
 end
 
