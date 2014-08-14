@@ -2,13 +2,18 @@ require 'rails_helper'
 
 describe CybersourceSigner do
   let(:profile) do
-    CybersourceProfile.new(
-      name: 'Admissions Acceptance Fee',
-      service: 'test',
-      profile_id: 'acptfee',
-      access_key: 'afd7d26021e53ad1a48f1ec10c528ec8',
-      secret_key: '298e5f32e86e44ecab9c0f9c544ed2dbd42377605bd64cee85ea9d7c239babfabb664153975d49b3b6377cacf8343d282f34ba20b342482cbf892be121a3820524007662e8d54222b2ef50b2f535a2fa1556f9a257f54600bba3020ca66bf15dc327ec025ced4f23903d19435547001bd3a103b7577a4a6a998e588dbc4880bc'
-    )
+    cybersource_profiles = {
+      'pwksgem' =>
+        {
+          'name' => 'PromptWorks Gem',
+          'service' => 'test',
+          'access_key' => '839d4d3b1cef3e04bd2981997714803b',
+          'secret_key' => 'a88c7ea074fb4dea97fe33b2442ed1bed132018e773a4097848039772208de3ddd39b11f74414e709263d76e82fcc9bbef51de4852a643cabd668ba981ff3b137d5b150a352c41c3bd59edcb3ccd11eed06139676d7e44e5ba60a3b44a0a2541236bc5194db4474abba15c991d9bee0a3bc767a3b87d434789cd310da6e3a19c',
+          'return_url' => 'http://tranquil-ocean-5865.herokuapp.com/responses',
+          'transaction_type' => 'sale'
+        }
+    }
+    CybersourceProfile.new('pwksgem', cybersource_profiles)
   end
 
   subject(:cybersource) { CybersourceSigner.new(profile) }
@@ -22,16 +27,17 @@ describe CybersourceSigner do
       expect(form_data[:reference_number].length).to eq 32
 
       expect(cybersource.form_data).to match a_hash_including(
-        access_key: 'afd7d26021e53ad1a48f1ec10c528ec8',
-        profile_id: 'acptfee',
+        access_key: '839d4d3b1cef3e04bd2981997714803b',
+        profile_id: 'pwksgem',
         payment_method: 'card',
         locale: 'en',
         transaction_type: 'sale',
         currency: 'USD',
-        unsigned_field_names: 'bill_to_email,bill_to_forename,bill_to_surname,bill_to_address_line1,bill_to_address_line2,bill_to_address_country,bill_to_address_state,bill_to_address_postal_code,bill_to_address_city,card_cvn,card_expiry_date,card_number,card_type,commit',
+        amount: '100',
+        unsigned_field_names: 'bill_to_email,bill_to_forename,bill_to_surname,bill_to_address_line1,bill_to_address_line2,bill_to_address_country,bill_to_address_state,bill_to_address_postal_code,bill_to_address_city,card_cvn,card_expiry_date,card_number,card_type',
         transaction_uuid: form_data[:transaction_uuid],
         reference_number: form_data[:reference_number],
-        signed_field_names: 'access_key,profile_id,payment_method,locale,transaction_type,currency,unsigned_field_names,transaction_uuid,reference_number,signed_field_names,signed_date_time',
+        signed_field_names: 'access_key,profile_id,payment_method,locale,transaction_type,amount,currency,unsigned_field_names,transaction_uuid,reference_number,signed_field_names,signed_date_time',
         signed_date_time: form_data[:signed_date_time]
       )
     end
