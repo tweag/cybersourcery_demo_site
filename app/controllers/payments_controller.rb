@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: :create
-  before_action :normalize_cybersource_params, only: :create
+  before_action :normalize_cybersource_params#, only: :create
 
   def new
     profile = CybersourceProfile.new('pwksgem')
@@ -17,7 +17,6 @@ class PaymentsController < ApplicationController
     response_handler = CybersourceResponseHandler.new(params, signer)
     redirect_to response_handler.run
   rescue Exception => e
-    Rails.logger.info params.to_yaml
     flash.now[:alert] = e.message
     profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
