@@ -19,7 +19,7 @@ class PaymentsController < ApplicationController
     flash.now[:alert] = e.message
     profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
-    @signed_form_data = signer.signed_form_data
+    @payment = Payment.new(signer, profile)
     render :new
   end
 end
