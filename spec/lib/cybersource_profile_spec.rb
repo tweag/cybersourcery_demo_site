@@ -40,7 +40,7 @@ describe CybersourceProfile do
   describe '#transaction_url' do
     it 'returns the "test" mode Cybersource transaction URL' do
       profile = CybersourceProfile.new('pwksgem', cybersource_profiles)
-      expect(profile.transaction_url).to eq 'https://testsecureacceptance.cybersource.com/silent/pay'
+      expect(profile.transaction_url).to eq 'http://localhost:2134/silent/pay'
     end
 
     it 'returns the "live" mode Cybersource transaction URL' do
