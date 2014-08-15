@@ -4,8 +4,8 @@ require 'active_support/core_ext/array/conversions.rb' # so we can use to_senten
 class CybersourceProfile
   include ActiveModel::Validations
 
-  attr_reader :profile_id, :name, :service, :access_key, :secret_key, :return_url, :transaction_type, :conversions
-  validates_presence_of :profile_id, :name, :service, :access_key, :secret_key, :return_url,
+  attr_reader :profile_id, :name, :service, :access_key, :secret_key, :success_url, :transaction_type, :conversions
+  validates_presence_of :profile_id, :name, :service, :access_key, :secret_key, :success_url,
                         :transaction_type
   validates_inclusion_of :service, :in => ['test', 'live'], allow_nil: false
 
@@ -16,7 +16,7 @@ class CybersourceProfile
     @service = cybersource_profiles[profile_id]['service']
     @access_key = cybersource_profiles[profile_id]['access_key']
     @secret_key = cybersource_profiles[profile_id]['secret_key']
-    @return_url = cybersource_profiles[profile_id]['return_url']
+    @success_url = cybersource_profiles[profile_id]['success_url']
     @transaction_type = cybersource_profiles[profile_id]['transaction_type']
 
     unless self.valid?
