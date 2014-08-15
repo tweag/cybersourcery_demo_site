@@ -28,7 +28,9 @@ class CybersourceProfile
     if @service == 'live'
       'https://secureacceptance.cybersource.com/silent/pay'
     else
-      'https://testsecureacceptance.cybersource.com/silent/pay'
+      # Point to Sorcery, which has canned responses from the actual test service at
+      # https://testsecureacceptance.cybersource.com/silent/pay
+      'http://localhost:2134/silent/pay'
     end
   end
 end
