@@ -37,40 +37,4 @@ class Payment
   def signed_form_data
     @signer.signed_form_data
   end
-
-  def simple_form_input(form, field, value = nil, required = true)
-    form.input field, label: field_label(field), input_html: { name: field.to_s, value: value }
-  end
-
-  def simple_form_select(form, field, collection, selected = nil, prompt = nil)
-    form.input(
-      field,
-      label: field_label(field),
-      collection: collection,
-      selected: selected,
-      prompt: prompt,
-      input_html: { name: field.to_s }
-    )
-  end
-
-  def hidden_input(form, field, value = nil)
-    form.hidden_field field, value: value, name: field.to_s
-  end
-
-  def field_label(field)
-    labels = {
-      bill_to_forename: 'First Name',
-      bill_to_surname: 'Last Name',
-      card_number: 'Card Number',
-      card_cvn: 'Security Code',
-      card_expiry_dummy: 'Expiration',
-      bill_to_email: 'Email',
-      bill_to_address_line1: 'Street Address (line 1)',
-      bill_to_address_line2: 'Street Address (line 2)',
-      bill_to_address_city: 'City',
-      bill_to_address_state: 'State (Province)',
-      bill_to_address_postal_code: 'Zip (Postal Code)'
-    }
-    labels[field]
-  end
 end

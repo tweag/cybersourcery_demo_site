@@ -7,18 +7,18 @@
         html: { class: 'form-horizontal', role: 'form' },
         wrapper: :horizontal_form do |f|
 
-      = @payment.hidden_input f, :card_expiry_date
+      = hidden_input f, :card_expiry_date
 
       - @payment.signed_form_data.each do |field, value|
-        = @payment.hidden_input f, field, value
+        = hidden_input f, field, value
 
       fieldset
         legend Credit Card Information
 
-        = @payment.simple_form_input f, :bill_to_forename, params[:bill_to_forename]
-        = @payment.simple_form_input f, :bill_to_surname, params[:bill_to_surname]
-        = @payment.simple_form_input f, :card_number
-        = f.input :card_expiry_dummy, label: @payment.field_label(:card_expiry_dummy) do
+        = simple_form_input f, :bill_to_forename, params[:bill_to_forename]
+        = simple_form_input f, :bill_to_surname, params[:bill_to_surname]
+        = simple_form_input f, :card_number
+        = f.input :card_expiry_dummy, label: field_label(:card_expiry_dummy) do
           = f.date_select :card_expiry_dummy,
             { discard_day: true,
               order: [:month, :year],
@@ -28,19 +28,19 @@
               date_separator: ' / ',
               prompt: true },
             { :class => 'select required form-control card-expiry' }
-        = @payment.simple_form_input f, :card_cvn
-        = @payment.simple_form_select f, :card_type, card_types, nil, true
+        = simple_form_input f, :card_cvn
+        = simple_form_select f, :card_type, card_types, nil, true
 
       fieldset
         legend Billing Address
 
-        = @payment.simple_form_input f, :bill_to_email, params[:bill_to_email]
-        = @payment.simple_form_select f, :bill_to_address_country, countries, (params[:bill_to_address_country].present? ? params[:bill_to_address_country] : 'US')
-        = @payment.simple_form_input f, :bill_to_address_line1, params[:bill_to_address_line1]
-        = @payment.simple_form_input f, :bill_to_address_line2, params[:bill_to_address_line2]
-        = @payment.simple_form_input f, :bill_to_address_city, params[:bill_to_address_city]
-        = @payment.simple_form_select f, :bill_to_address_state, us_states, params[:bill_to_address_state], true
-        = @payment.simple_form_input f, :bill_to_address_postal_code, params[:bill_to_address_postal_code]
+        = simple_form_input f, :bill_to_email, params[:bill_to_email]
+        = simple_form_select f, :bill_to_address_country, countries, (params[:bill_to_address_country].present? ? params[:bill_to_address_country] : 'US')
+        = simple_form_input f, :bill_to_address_line1, params[:bill_to_address_line1]
+        = simple_form_input f, :bill_to_address_line2, params[:bill_to_address_line2]
+        = simple_form_input f, :bill_to_address_city, params[:bill_to_address_city]
+        = simple_form_select f, :bill_to_address_state, us_states, params[:bill_to_address_state], true
+        = simple_form_input f, :bill_to_address_postal_code, params[:bill_to_address_postal_code]
 
       .form-group
         .col-sm-offset-3.col-sm-9
