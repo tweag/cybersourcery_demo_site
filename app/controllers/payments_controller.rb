@@ -14,7 +14,7 @@ class PaymentsController < ApplicationController
   def create
     profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
-    response_handler = CybersourceResponseHandler.new(params, signer)
+    response_handler = CybersourceResponseHandler.new(params, signer, profile)
     redirect_to response_handler.run
   rescue Exception => e
     flash.now[:alert] = e.message

@@ -1,4 +1,4 @@
-class CybersourceResponseHandler < Struct.new(:params, :cybersource_signer)
+class CybersourceResponseHandler < Struct.new(:params, :signer, :profile)
 
   # thank you FoxyCart!
   # https://forum.foxycart.com/discussion/311/customizing-payment-gateway-reason-code-messages-in-foxycart/p1
@@ -45,8 +45,7 @@ class CybersourceResponseHandler < Struct.new(:params, :cybersource_signer)
     verify_signature
     check_for_transaction_errors
     # TODO: add logging hook
-
-    return return_url
+    profile.success_url
   end
 
   def verify_signature
@@ -64,19 +63,13 @@ class CybersourceResponseHandler < Struct.new(:params, :cybersource_signer)
     end
   end
 
-  def return_url
-    # TODO: probably set this in the profile
-    #log.return_url.presence || raise('The return URL is not set')
-    '/responses'
-  end
-
   private
 
   # This should probably go in a separate class
   def signature
     signature_keys = params.fetch('signed_field_names').split(',').map(&:to_sym)
     params_with_sym_keys = Hash[params.map{ |k, v| [k.to_sym, v] }]
-    cybersource_signer.form_data = params_with_sym_keys.select { |k, v| signature_keys.include? k }
-    cybersource_signer.signed_form_data[:signature]
+    signer.form_data = params_with_sym_keys.select { |k, v| signature_keys.include? k }
+    signer.signed_form_data[:signature]
   end
 end
