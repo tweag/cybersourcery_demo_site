@@ -11,8 +11,7 @@ class PaymentsController < ApplicationController
   end
 
   # This receives a POST from Cybersource, which handles the transaction itself.
-  # TODO: We will check for errors, provide logging hooks, and redirect the user per the profile
-  # settings (or show them a custom message?)
+  # TODO: provide logging hooks
   def confirm
     profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
@@ -23,11 +22,10 @@ class PaymentsController < ApplicationController
     flash.now[:alert] = e.message
     profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
-    # TODO: this won't work - we need the params from the original request to #pay - see Penn code for this
     fielder = SignedFieldsFielder.new(signer, profile, params)
     fielder.check_signature!
     @payment = Payment.new(fielder, profile)
-    render :new
+    render :pay
   end
 
   private
