@@ -32,9 +32,23 @@ class CybersourceSigner
       payment_method:       "card",
       locale:               "en",
       transaction_type:     "sale",
-      amount:               "100", # TODO: the amount must be signed, but we obviously don't want it here
       currency:             "USD"
     }
+  end
+
+  def add_cybersource_fields(params)
+    params_with_sym_keys = Hash[params.map{|(k,v)| [k.to_sym,v]}]
+
+    allowed_fields = %i[
+      amount
+      merchant_defined_data1
+      merchant_defined_data2
+      merchant_defined_data3
+      merchant_defined_data4
+    ]
+
+    filtered_fields = params_with_sym_keys.select{ |key, value| allowed_fields.include? key }
+    cybersource_fields.merge!(filtered_fields)
   end
 
   def form_data
