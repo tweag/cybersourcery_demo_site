@@ -4,21 +4,10 @@ class PaymentsController < ApplicationController
 
   def pay
     profile = CybersourceProfile.new('pwksgem')
-
-    signature_keys = params[:signed_field_names].split(',')
-    signature_elements = {
-      'amount' => params[:amount],
-      'signed_field_names' => params[:signed_field_names]
-    }
-    signature_message = CybersourceSigner.signature_message(signature_elements, signature_keys)
-    signature_check = CybersourceSigner::Signer.signature(signature_message, profile.secret_key)
-
-    unless signature_check == params[:signature]
-      raise 'Detected tampering with the form data'
-    end
-
     signer = CybersourceSigner.new(profile)
-    @payment = Payment.new(signer, profile)
+    fielder = SignedFieldsFielder.new(signer, profile, params)
+    fielder.check_signature!
+    @payment = Payment.new(fielder, profile)
   end
 
   # This receives a POST from Cybersource, which handles the transaction itself.
@@ -27,13 +16,17 @@ class PaymentsController < ApplicationController
   def confirm
     profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
-    response_handler = CybersourceResponseHandler.new(params, signer, profile)
+    fielder = SignedFieldsFielder.new(signer, profile, params)
+    response_handler = CybersourceResponseHandler.new(params, fielder, profile)
     redirect_to response_handler.run
   rescue Exception => e
     flash.now[:alert] = e.message
     profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
-    @payment = Payment.new(signer, profile)
+    # TODO: this won't work - we need the params from the original request to #pay - see Penn code for this
+    fielder = SignedFieldsFielder.new(signer, profile, params)
+    fielder.check_signature!
+    @payment = Payment.new(fielder, profile)
     render :new
   end
 
