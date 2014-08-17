@@ -37,18 +37,12 @@ class CybersourceSigner
   end
 
   def add_cybersource_fields(params)
-    params_with_sym_keys = Hash[params.map{|(k,v)| [k.to_sym,v]}]
+    filtered_params = params.select { |key, value|
+      key == 'amount' || key.match('^merchant_defined_data\d{1,3}$')
+    }
 
-    allowed_fields = %i[
-      amount
-      merchant_defined_data1
-      merchant_defined_data2
-      merchant_defined_data3
-      merchant_defined_data4
-    ]
-
-    filtered_fields = params_with_sym_keys.select{ |key, value| allowed_fields.include? key }
-    cybersource_fields.merge!(filtered_fields)
+    filtered_params_with_sym_keys = Hash[filtered_params.map{|(k,v)| [k.to_sym,v]}]
+    cybersource_fields.merge!(filtered_params_with_sym_keys)
   end
 
   def form_data
