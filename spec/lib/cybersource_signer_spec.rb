@@ -18,27 +18,26 @@ describe CybersourceSigner do
 
   subject(:cybersource) { CybersourceSigner.new(profile) }
 
-  describe '#form_data' do
-    it 'sets the form_data fields' do
-      form_data = cybersource.form_data
+  describe '#form_fields' do
+    it 'sets form_fields' do
+      form_fields = cybersource.form_fields
 
       # these two fields are generated each time
-      expect(form_data[:transaction_uuid].length).to eq 32
-      expect(form_data[:reference_number].length).to eq 32
+      expect(form_fields[:transaction_uuid].length).to eq 32
+      expect(form_fields[:reference_number].length).to eq 32
 
-      expect(cybersource.form_data).to match a_hash_including(
+      expect(cybersource.form_fields).to match a_hash_including(
         access_key: '839d4d3b1cef3e04bd2981997714803b',
         profile_id: 'pwksgem',
         payment_method: 'card',
         locale: 'en',
         transaction_type: 'sale',
         currency: 'USD',
-        amount: '100',
         unsigned_field_names: 'bill_to_email,bill_to_forename,bill_to_surname,bill_to_address_line1,bill_to_address_line2,bill_to_address_country,bill_to_address_state,bill_to_address_postal_code,bill_to_address_city,card_cvn,card_expiry_date,card_number,card_type',
-        transaction_uuid: form_data[:transaction_uuid],
-        reference_number: form_data[:reference_number],
-        signed_field_names: 'access_key,profile_id,payment_method,locale,transaction_type,amount,currency,unsigned_field_names,transaction_uuid,reference_number,signed_field_names,signed_date_time',
-        signed_date_time: form_data[:signed_date_time]
+        transaction_uuid: form_fields[:transaction_uuid],
+        reference_number: form_fields[:reference_number],
+        signed_field_names: 'access_key,profile_id,payment_method,locale,transaction_type,currency,unsigned_field_names,transaction_uuid,reference_number,signed_field_names,signed_date_time',
+        signed_date_time: form_fields[:signed_date_time]
       )
     end
   end
@@ -61,7 +60,7 @@ describe CybersourceSigner do
 
     subject! do
       cybersource.time = time
-      cybersource.signed_form_data
+      cybersource.sign_fields
     end
 
     it 'should have the correct signed date_time' do
@@ -73,17 +72,17 @@ describe CybersourceSigner do
     end
 
     it 'should get signature from signer' do
-      form_data = cybersource.form_data
-      keys = cybersource.form_data[:signed_field_names].split(',').map { |e| e.to_sym }
-      message = CybersourceSigner.signature_message(form_data, keys)
+      form_fields = cybersource.form_fields
+      keys = cybersource.form_fields[:signed_field_names].split(',').map { |e| e.to_sym }
+      message = CybersourceSigner.signature_message(form_fields, keys)
       expect(signer.received_message).to eq message
       expect(signer.received_secret_key).to eq profile.secret_key
     end
   end
 
   describe '.signature_message' do
-    let(:form_data) { { foo: :bar, biz: :baz, wrong: :excluded } }
-    subject { CybersourceSigner.signature_message(form_data, %i[biz foo]) }
+    let(:form_fields) { { foo: :bar, biz: :baz, wrong: :excluded } }
+    subject { CybersourceSigner.signature_message(form_fields, %i[biz foo]) }
     it { should eq 'biz=baz,foo=bar' }
   end
 end
