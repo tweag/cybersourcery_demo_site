@@ -28,7 +28,7 @@ class CybersourceProfile
     if Rails.env.test?
       # Point to Sorcery, which has canned responses from the actual test service
       # TODO: don't hardcode the Sorcery URL like this
-      'http://localhost:2134/silent/pay'
+      'http://localhost:4567/silent/pay'
     elsif @service == 'live'
       'https://secureacceptance.cybersource.com/silent/pay'
     elsif @service == 'test'
