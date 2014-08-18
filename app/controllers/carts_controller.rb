@@ -2,7 +2,6 @@ class CartsController < ApplicationController
   def new
     profile = CybersourceProfile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
-    fielder = SignedFieldsFielder.new(signer, profile)
-    @signed_fields = fielder.sign_arbitrary_fields({amount: 100})
+    @signed_fields = signer.sign_cart_fields({amount: 100})
   end
 end
