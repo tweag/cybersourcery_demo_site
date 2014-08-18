@@ -1,4 +1,4 @@
-class CybersourceResponseHandler < Struct.new(:params, :signature_checker, :profile)
+class CybersourceResponseHandler
 
   # thank you FoxyCart!
   # https://forum.foxycart.com/discussion/311/customizing-payment-gateway-reason-code-messages-in-foxycart/p1
@@ -41,18 +41,24 @@ class CybersourceResponseHandler < Struct.new(:params, :signature_checker, :prof
     '250' => 'Error: The request was received, but there was a timeout at the payment processor'
   }
 
+  def initialize(params, signature_checker, profile)
+    @params = params
+    @signature_checker = signature_checker
+    @profile = profile
+  end
+
   def run
-    signature_checker.run!
+    @signature_checker.run!
     check_for_transaction_errors
     # TODO: add logging hook
-    profile.success_url
+    @profile.success_url
   end
 
   def check_for_transaction_errors
-    unless params['reason_code'] == '100'
+    unless @params['reason_code'] == '100'
       raise Exceptions::CybersourceryError, RESPONSE_CODE_EXPLANATIONS.fetch(
-        params['reason_code'],
-        "Declined: unknown reason (code #{params['reason_code']})"
+        @params['reason_code'],
+        "Declined: unknown reason (code #{@params['reason_code']})"
       )
     end
   end
