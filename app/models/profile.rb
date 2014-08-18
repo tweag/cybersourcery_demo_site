@@ -1,7 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext/array/conversions.rb' # so we can use to_sentence
 
-class CybersourceProfile
+class Profile
   include ActiveModel::Validations
 
   attr_reader :profile_id, :name, :service, :access_key, :secret_key, :success_url, :transaction_type, :conversions
@@ -9,15 +9,15 @@ class CybersourceProfile
                         :transaction_type
   validates_inclusion_of :service, :in => ['test', 'live'], allow_nil: false
 
-  def initialize(profile_id, cybersource_profiles = CYBERSOURCE_PROFILES)
+  def initialize(profile_id, profiles = CYBERSOURCE_PROFILES)
     @profile_id = profile_id
     # this is verbose, but I don't want to blindly use a loop with instance_variable_set calls
-    @name = cybersource_profiles[profile_id]['name']
-    @service = cybersource_profiles[profile_id]['service']
-    @access_key = cybersource_profiles[profile_id]['access_key']
-    @secret_key = cybersource_profiles[profile_id]['secret_key']
-    @success_url = cybersource_profiles[profile_id]['success_url']
-    @transaction_type = cybersource_profiles[profile_id]['transaction_type']
+    @name = profiles[profile_id]['name']
+    @service = profiles[profile_id]['service']
+    @access_key = profiles[profile_id]['access_key']
+    @secret_key = profiles[profile_id]['secret_key']
+    @success_url = profiles[profile_id]['success_url']
+    @transaction_type = profiles[profile_id]['transaction_type']
 
     unless self.valid?
       raise Exceptions::CybersourceryError, self.errors.full_messages.to_sentence

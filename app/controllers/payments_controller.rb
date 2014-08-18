@@ -8,7 +8,7 @@ class PaymentsController < ApplicationController
 
   # This receives a POST from Cybersource, which handles the transaction itself.
   def confirm
-    profile = CybersourceProfile.new('pwksgem')
+    profile = Profile.new('pwksgem')
     signature_checker = SignatureChecker.new(profile, params)
     response_handler = CybersourceResponseHandler.new(params, signature_checker, profile)
     redirect_to response_handler.run
@@ -27,7 +27,7 @@ class PaymentsController < ApplicationController
   end
 
   def setup_payment_form
-    profile = CybersourceProfile.new('pwksgem')
+    profile = Profile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
     signature_checker = SignatureChecker.new(profile, params, true)
     signature_checker.run!

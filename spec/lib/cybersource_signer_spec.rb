@@ -13,7 +13,7 @@ describe CybersourceSigner do
           'transaction_type' => 'sale'
         }
     }
-    CybersourceProfile.new('pwksgem', cybersource_profiles)
+    Profile.new('pwksgem', cybersource_profiles)
   end
 
   subject(:cybersource) { CybersourceSigner.new(profile) }
