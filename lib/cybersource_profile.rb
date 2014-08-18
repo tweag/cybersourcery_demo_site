@@ -24,17 +24,15 @@ class CybersourceProfile
     end
   end
 
-  def transaction_url
-    if Rails.env.test?
-      # Point to Sorcery, which has canned responses from the actual test service
-      # TODO: don't hardcode the Sorcery URL like this
-      'http://localhost:4567/silent/pay'
+  def transaction_url(env = Rails.env)
+    if env == 'test'
+      "#{SORCERY_URL}/silent/pay"
     elsif @service == 'live'
       'https://secureacceptance.cybersource.com/silent/pay'
     elsif @service == 'test'
       'https://testsecureacceptance.cybersource.com/silent/pay'
     else
-      raise Exceptions::CybersourceryError, 'Invalid value for @service'
+      raise Exceptions::CybersourceryError, 'Invalid conditions for determining the transaction_url'
     end
   end
 end
