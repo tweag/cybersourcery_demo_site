@@ -7,7 +7,7 @@ class Payment
   # So we can use form_for in a view
   include ActiveModel::Conversion
 
-  attr_reader :fielder, :profile, :errors
+  attr_reader :signer, :profile, :params, :errors
   attr_accessor :bill_to_forename, :bill_to_surname, :card_number, :card_expiry_date,
                 :card_expiry_dummy, :card_expiry_month, :card_expiry_year, :card_cvn, :card_type,
                 :bill_to_email, :bill_to_address_line1, :bill_to_address_line2,
@@ -22,9 +22,10 @@ class Payment
     false
   end
 
-  def initialize(fielder, profile)
-    @fielder = fielder
+  def initialize(signer, profile, params)
+    @signer = signer
     @profile = profile
+    @params = params
     # I'm not doing dependency injection for ActiveModel dependencies.
     # Given we're extending ActiveModel::Naming above, we're already tightly bound...
     @errors = ActiveModel::Errors.new(self)
@@ -34,7 +35,19 @@ class Payment
     @profile.transaction_url
   end
 
-  def signed_form_data
-    @fielder.sign_cybersource_fields
+  def sign_cybersource_fields
+    # We're reserving merchant defined data fields 99 and 100 for fields we will need in the case of
+    # a failed transaction, so we can re-create the state of the submission from the cart to the
+    # credit card payment form.
+
+    if @params['merchant_defined_data99'].blank?
+      @params['merchant_defined_data99'] = @params['signed_field_names']
+    end
+
+    if @params['merchant_defined_data100'].blank?
+      @params['merchant_defined_data100'] = @params['signature']
+    end
+
+    @signer.sign_cybersource_fields(@params)
   end
 end
