@@ -3,28 +3,18 @@ class PaymentsController < ApplicationController
   before_action :normalize_cybersource_params, only: :confirm
 
   def pay
-    profile = CybersourceProfile.new('pwksgem')
-    signer = CybersourceSigner.new(profile)
-    fielder = SignedFieldsFielder.new(signer, profile, params)
-    fielder.check_signature!
-    @payment = Payment.new(fielder, profile)
+    setup_payment_form
   end
 
   # This receives a POST from Cybersource, which handles the transaction itself.
-  # TODO: provide logging hooks
   def confirm
     profile = CybersourceProfile.new('pwksgem')
-    signer = CybersourceSigner.new(profile)
-    fielder = SignedFieldsFielder.new(signer, profile, params)
-    response_handler = CybersourceResponseHandler.new(params, fielder, profile)
+    signature_checker = SignatureChecker.new(profile, params)
+    response_handler = CybersourceResponseHandler.new(params, signature_checker, profile)
     redirect_to response_handler.run
-  rescue Exception => e
+  rescue CybersourceryError => e
     flash.now[:alert] = e.message
-    profile = CybersourceProfile.new('pwksgem')
-    signer = CybersourceSigner.new(profile)
-    fielder = SignedFieldsFielder.new(signer, profile, params)
-    fielder.check_signature!
-    @payment = Payment.new(fielder, profile)
+    setup_payment_form
     render :pay
   end
 
@@ -36,4 +26,14 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def setup_payment_form
+    profile = CybersourceProfile.new('pwksgem')
+    signer = CybersourceSigner.new(profile)
+    signature_checker = SignatureChecker.new(profile, params, true)
+    signature_checker.run!
+    @payment = Payment.new(signer, profile, params)
+  rescue CybersourceryError => e
+    flash.now[:alert] = e.message
+    render :blank
+  end
 end
