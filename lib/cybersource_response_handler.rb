@@ -50,7 +50,7 @@ class CybersourceResponseHandler < Struct.new(:params, :signature_checker, :prof
 
   def check_for_transaction_errors
     unless params['reason_code'] == '100'
-      raise CybersourceryError, RESPONSE_CODE_EXPLANATIONS.fetch(
+      raise Exceptions::CybersourceryError, RESPONSE_CODE_EXPLANATIONS.fetch(
         params['reason_code'],
         "Declined: unknown reason (code #{params['reason_code']})"
       )

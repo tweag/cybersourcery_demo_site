@@ -12,7 +12,7 @@ class SignatureChecker
   end
 
   def run!
-    raise CybersourceryError, 'Detected possible data tampering. Signatures do not match.' unless run
+    raise Exceptions::CybersourceryError, 'Detected possible data tampering. Signatures do not match.' unless run
   end
 
   def signature_message

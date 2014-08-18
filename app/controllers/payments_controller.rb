@@ -12,7 +12,7 @@ class PaymentsController < ApplicationController
     signature_checker = SignatureChecker.new(profile, params)
     response_handler = CybersourceResponseHandler.new(params, signature_checker, profile)
     redirect_to response_handler.run
-  rescue CybersourceryError => e
+  rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
     setup_payment_form
     render :pay
@@ -32,8 +32,8 @@ class PaymentsController < ApplicationController
     signature_checker = SignatureChecker.new(profile, params, true)
     signature_checker.run!
     @payment = Payment.new(signer, profile, params)
-  rescue CybersourceryError => e
+  rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
-    render :blank
+    render :error
   end
 end

@@ -20,7 +20,7 @@ class CybersourceProfile
     @transaction_type = cybersource_profiles[profile_id]['transaction_type']
 
     unless self.valid?
-      raise CybersourceryError, self.errors.full_messages.to_sentence
+      raise Exceptions::CybersourceryError, self.errors.full_messages.to_sentence
     end
   end
 
@@ -34,7 +34,7 @@ class CybersourceProfile
     elsif @service == 'test'
       'https://testsecureacceptance.cybersource.com/silent/pay'
     else
-      raise CybersourceryError, 'Invalid value for @service'
+      raise Exceptions::CybersourceryError, 'Invalid value for @service'
     end
   end
 end

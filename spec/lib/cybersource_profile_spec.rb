@@ -28,12 +28,12 @@ describe CybersourceProfile do
 
     it 'raises an exception if the "service" value is not "live" or "test"' do
       cybersource_profiles['pwksgem']['service'] = 'foo'
-      expect { CybersourceProfile.new('pwksgem',cybersource_profiles) }.to raise_exception(CybersourceryError)
+      expect { CybersourceProfile.new('pwksgem',cybersource_profiles) }.to raise_exception(Exceptions::CybersourceryError)
     end
 
     it 'raises an exception if any setting is missing' do
       cybersource_profiles['pwksgem']['access_key'] = nil
-      expect { CybersourceProfile.new('pwksgem', cybersource_profiles) }.to raise_exception(CybersourceryError)
+      expect { CybersourceProfile.new('pwksgem', cybersource_profiles) }.to raise_exception(Exceptions::CybersourceryError)
     end
   end
 
