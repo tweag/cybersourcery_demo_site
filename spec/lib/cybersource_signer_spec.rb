@@ -16,10 +16,43 @@ describe CybersourceSigner do
     Profile.new('pwksgem', cybersource_profiles)
   end
 
-  subject(:cybersource) { CybersourceSigner.new(profile) }
+  let(:time) { Time.parse '2014-03-05 13:30:59:UTC' }
+  let(:signature) { 'SUPER_SECURE_SIGNATURE' }
+  let(:signer) { double :signer, signature: signature }
+  subject(:cybersource) { CybersourceSigner.new(profile, signer) }
+
+  describe '#add_cybersource_fields' do
+    it 'adds allowed fields and rejects disallowed fields' do
+      params = {
+        'amount' => '60',
+        'merchant_defined_data0' => '2013',
+        'merchant_defined_data1' => '2014',
+        'merchant_defined_data100' => '2015',
+        'merchant_defined_data1001' => '2016',
+        'foo' => 'bar'
+      }
+      cybersource.add_cybersource_fields(params)
+
+      expect(cybersource.cybersource_fields).to match a_hash_including(
+        amount: '60',
+        merchant_defined_data1: '2014',
+        merchant_defined_data100: '2015'
+      )
+    end
+  end
+
+  describe '#sign_fields' do
+    it 'creates a signature' do
+      signed_fields = cybersource.sign_fields
+      expect(signed_fields[:signature]).to eq signature
+    end
+  end
 
   describe '#form_fields' do
+    # This method is technically a reader, but acts like a writer.
+    # form_fields is an attr_writer, which means you can set the value directly yourself also.
     it 'sets form_fields' do
+      cybersource.time = time
       form_fields = cybersource.form_fields
 
       # these two fields are generated each time
@@ -37,46 +70,8 @@ describe CybersourceSigner do
         transaction_uuid: form_fields[:transaction_uuid],
         reference_number: form_fields[:reference_number],
         signed_field_names: 'access_key,profile_id,payment_method,locale,transaction_type,currency,unsigned_field_names,transaction_uuid,reference_number,signed_field_names,signed_date_time',
-        signed_date_time: form_fields[:signed_date_time]
+        signed_date_time: time
       )
-    end
-  end
-
-  describe '#signed_form_data' do
-    class FakeSigner < OpenStruct
-      def signature(message, secret_key)
-        self.received_message = message
-        self.received_secret_key = secret_key
-        fake_signature
-      end
-    end
-
-    let(:time) { Time.parse '2014-03-05 13:30:59:UTC' }
-    let(:signature) { 'SUPERSECURESIGNATURE' }
-    let(:signer) { FakeSigner.new(fake_signature: signature) }
-    let(:cybersource) do
-      CybersourceSigner.new(profile, signer)
-    end
-
-    subject! do
-      cybersource.time = time
-      cybersource.sign_fields
-    end
-
-    it 'should have the correct signed date_time' do
-      expect(subject[:signed_date_time]).to eq time
-    end
-
-    it 'should have the correct signature' do
-      expect(subject[:signature]).to eq signature
-    end
-
-    it 'should get signature from signer' do
-      form_fields = cybersource.form_fields
-      keys = cybersource.form_fields[:signed_field_names].split(',').map { |e| e.to_sym }
-      message = CybersourceSigner.signature_message(form_fields, keys)
-      expect(signer.received_message).to eq message
-      expect(signer.received_secret_key).to eq profile.secret_key
     end
   end
 

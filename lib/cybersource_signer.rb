@@ -42,9 +42,21 @@ class CybersourceSigner
   end
 
   def add_cybersource_fields(params)
-    filtered_params = params.select { |key, value|
-      key == 'amount' || key.match('^merchant_defined_data\d{1,3}$')
-    }
+    filtered_params = params.select do |key, value|
+      result = false
+
+      if key == 'amount'
+        result = true
+      else
+        match_data = /^merchant_defined_data(\d{1,3})$/.match(key)
+
+        if match_data.present?
+          result = match_data[1].to_i > 0 && match_data[1].to_i < 101
+        end
+      end
+
+      result
+    end
 
     filtered_params_with_sym_keys = Hash[filtered_params.map{|(k,v)| [k.to_sym,v]}]
     cybersource_fields.merge!(filtered_params_with_sym_keys)
