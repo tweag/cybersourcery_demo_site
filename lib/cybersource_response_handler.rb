@@ -1,4 +1,4 @@
-class CybersourceResponseHandler < Struct.new(:params, :fielder, :profile)
+class CybersourceResponseHandler < Struct.new(:params, :signature_checker, :profile)
 
   # thank you FoxyCart!
   # https://forum.foxycart.com/discussion/311/customizing-payment-gateway-reason-code-messages-in-foxycart/p1
@@ -42,7 +42,7 @@ class CybersourceResponseHandler < Struct.new(:params, :fielder, :profile)
   }
 
   def run
-    fielder.check_signature!
+    signature_checker.run!
     check_for_transaction_errors
     # TODO: add logging hook
     profile.success_url
@@ -50,7 +50,7 @@ class CybersourceResponseHandler < Struct.new(:params, :fielder, :profile)
 
   def check_for_transaction_errors
     unless params['reason_code'] == '100'
-      raise RESPONSE_CODE_EXPLANATIONS.fetch(
+      raise CybersourceryError, RESPONSE_CODE_EXPLANATIONS.fetch(
         params['reason_code'],
         "Declined: unknown reason (code #{params['reason_code']})"
       )
