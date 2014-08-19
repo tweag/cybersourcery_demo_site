@@ -20,7 +20,6 @@ class Profile
   validates_inclusion_of :endpoint_type, :in => VALID_ENDPOINTS.keys, allow_nil: false
 
   def initialize(profile_id, profiles = CYBERSOURCE_PROFILES)
-    puts self.instance_variables.to_yaml
     @profile_id = profile_id
     @name = profiles[profile_id]['name']
     @service = profiles[profile_id]['service']
