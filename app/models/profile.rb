@@ -4,10 +4,20 @@ require 'active_support/core_ext/array/conversions.rb' # so we can use to_senten
 class Profile
   include ActiveModel::Validations
 
-  attr_reader :profile_id, :name, :service, :access_key, :secret_key, :success_url, :transaction_type, :conversions
-  validates_presence_of :profile_id, :name, :service, :access_key, :secret_key, :success_url,
-                        :transaction_type
-  validates_inclusion_of :service, :in => ['test', 'live'], allow_nil: false
+  VALID_ENDPOINTS = {
+    standard: '/silent/pay',
+    create_payment_token: '/silent/token/create',
+    update_payment_token: '/silent/token/update',
+    iframe_standard: '/silent/embedded/pay',
+    iframe_create_payment_token: 'silent/embedded/token/create',
+    iframe_update_payment_token: '/silent/embedded/token/update'
+  }
+
+  attr_reader :profile_id, :name, :service, :access_key, :secret_key, :success_url,
+              :transaction_type, :endpoint_type, :conversions
+  validates_presence_of :profile_id, :name, :service, :access_key, :secret_key, :success_url
+  validates_inclusion_of :service, :in => %w(test live), allow_nil: false
+  validates_inclusion_of :endpoint_type, :in => VALID_ENDPOINTS.stringify_keys.keys, allow_nil: false
 
   def initialize(profile_id, profiles = CYBERSOURCE_PROFILES)
     @profile_id = profile_id
@@ -18,6 +28,7 @@ class Profile
     @secret_key = profiles[profile_id]['secret_key']
     @success_url = profiles[profile_id]['success_url']
     @transaction_type = profiles[profile_id]['transaction_type']
+    @endpoint_type = profiles[profile_id]['endpoint_type']
 
     unless self.valid?
       raise Exceptions::CybersourceryError, self.errors.full_messages.to_sentence
