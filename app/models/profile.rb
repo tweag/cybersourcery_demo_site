@@ -14,21 +14,21 @@ class Profile
   }
 
   attr_reader :profile_id, :name, :service, :access_key, :secret_key, :success_url,
-              :transaction_type, :endpoint_type, :conversions
+              :transaction_type, :endpoint_type
   validates_presence_of :profile_id, :name, :service, :access_key, :secret_key, :success_url
   validates_inclusion_of :service, :in => %w(test live), allow_nil: false
-  validates_inclusion_of :endpoint_type, :in => VALID_ENDPOINTS.stringify_keys.keys, allow_nil: false
+  validates_inclusion_of :endpoint_type, :in => VALID_ENDPOINTS.keys, allow_nil: false
 
   def initialize(profile_id, profiles = CYBERSOURCE_PROFILES)
+    puts self.instance_variables.to_yaml
     @profile_id = profile_id
-    # this is verbose, but I don't want to blindly use a loop with instance_variable_set calls
     @name = profiles[profile_id]['name']
     @service = profiles[profile_id]['service']
     @access_key = profiles[profile_id]['access_key']
     @secret_key = profiles[profile_id]['secret_key']
     @success_url = profiles[profile_id]['success_url']
     @transaction_type = profiles[profile_id]['transaction_type']
-    @endpoint_type = profiles[profile_id]['endpoint_type']
+    @endpoint_type = profiles[profile_id]['endpoint_type'].to_sym
 
     unless self.valid?
       raise Exceptions::CybersourceryError, self.errors.full_messages.to_sentence
@@ -37,11 +37,11 @@ class Profile
 
   def transaction_url(env = Rails.env)
     if env == 'test'
-      "#{SORCERY_URL}/silent/pay"
+      "#{SORCERY_URL}#{VALID_ENDPOINTS[@endpoint_type]}"
     elsif @service == 'live'
-      'https://secureacceptance.cybersource.com/silent/pay'
+      "https://secureacceptance.cybersource.com#{VALID_ENDPOINTS[@endpoint_type]}"
     elsif @service == 'test'
-      'https://testsecureacceptance.cybersource.com/silent/pay'
+      "https://testsecureacceptance.cybersource.com#{VALID_ENDPOINTS[@endpoint_type]}"
     else
       raise Exceptions::CybersourceryError, 'Invalid conditions for determining the transaction_url'
     end
