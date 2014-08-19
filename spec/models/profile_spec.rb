@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe CybersourceProfile do
-  let(:cybersource_profiles) do
+describe Profile do
+  let(:profiles) do
     { 'pwksgem' =>
       {
         'name' => 'PromptWorks Gem',
@@ -16,7 +16,7 @@ describe CybersourceProfile do
 
   describe '#initialize' do
     it 'sets the attributes when they are valid' do
-      profile = CybersourceProfile.new('pwksgem', cybersource_profiles)
+      profile = Profile.new('pwksgem', profiles)
       expect(profile.profile_id).to eq 'pwksgem'
       expect(profile.name).to eq 'PromptWorks Gem'
       expect(profile.service).to eq 'test'
@@ -27,26 +27,34 @@ describe CybersourceProfile do
     end
 
     it 'raises an exception if the "service" value is not "live" or "test"' do
-      cybersource_profiles['pwksgem']['service'] = 'foo'
-      expect { CybersourceProfile.new('pwksgem',cybersource_profiles) }.to raise_exception
+      profiles['pwksgem']['service'] = 'foo'
+      expect { Profile.new('pwksgem',profiles) }.to raise_exception(Exceptions::CybersourceryError)
     end
 
     it 'raises an exception if any setting is missing' do
-      cybersource_profiles['pwksgem']['access_key'] = nil
-      expect { CybersourceProfile.new('pwksgem', cybersource_profiles) }.to raise_exception
+      profiles['pwksgem']['access_key'] = nil
+      expect { Profile.new('pwksgem', profiles) }.to raise_exception(Exceptions::CybersourceryError)
     end
   end
 
   describe '#transaction_url' do
-    it 'returns the "test" mode Cybersource transaction URL' do
-      profile = CybersourceProfile.new('pwksgem', cybersource_profiles)
-      expect(profile.transaction_url).to eq 'http://localhost:2134/silent/pay'
+    it 'returns the Sorcery transaction URL, in the test environment' do
+      profile = Profile.new('pwksgem', profiles)
+      expect(profile.transaction_url).to eq 'http://localhost:4567/silent/pay'
     end
 
-    it 'returns the "live" mode Cybersource transaction URL' do
-      cybersource_profiles['pwksgem']['service'] = 'live'
-      profile = CybersourceProfile.new('pwksgem', cybersource_profiles)
-      expect(profile.transaction_url).to eq 'https://secureacceptance.cybersource.com/silent/pay'
+    it 'returns the "test" service URL, when not in the test environment' do
+      profiles['pwksgem']['service'] = 'test'
+      profile = Profile.new('pwksgem', profiles)
+      transaction_url = profile.transaction_url('development')
+      expect(transaction_url).to eq 'https://testsecureacceptance.cybersource.com/silent/pay'
+    end
+
+    it 'returns the "live" service URL, when not in the test environment' do
+      profiles['pwksgem']['service'] = 'live'
+      profile = Profile.new('pwksgem', profiles)
+      transaction_url = profile.transaction_url('development')
+      expect(transaction_url).to eq 'https://secureacceptance.cybersource.com/silent/pay'
     end
   end
 end

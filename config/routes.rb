@@ -1,6 +1,7 @@
 Cybersourcery::Application.routes.draw do
-  resources :payments, only: [:new, :create]
+  resources :carts, only: :new
+  root to: 'carts#new'
+  post 'pay', to: 'payments#pay'
+  post 'confirm', to: 'payments#confirm'
   resources :responses, only: :index
-  resources :profiles
-  root to: 'payments#new'
 end

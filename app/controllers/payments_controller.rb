@@ -1,27 +1,21 @@
 class PaymentsController < ApplicationController
-  skip_before_filter :verify_authenticity_token, only: :create
-  before_action :normalize_cybersource_params#, only: :create
+  skip_before_filter :verify_authenticity_token, only: :confirm
+  before_action :normalize_cybersource_params, only: :confirm
 
-  def new
-    profile = CybersourceProfile.new('pwksgem')
-    signer = CybersourceSigner.new(profile)
-    @payment = Payment.new(signer, profile)
+  def pay
+    setup_payment_form
   end
 
   # This receives a POST from Cybersource, which handles the transaction itself.
-  # TODO: We will check for errors, provide logging hooks, and redirect the user per the profile
-  # settings (or show them a custom message?)
-  def create
-    profile = CybersourceProfile.new('pwksgem')
-    signer = CybersourceSigner.new(profile)
-    response_handler = CybersourceResponseHandler.new(params, signer, profile)
+  def confirm
+    profile = Profile.new('pwksgem')
+    signature_checker = SignatureChecker.new(profile, params)
+    response_handler = CybersourceResponseHandler.new(params, signature_checker, profile)
     redirect_to response_handler.run
-  rescue Exception => e
+  rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
-    profile = CybersourceProfile.new('pwksgem')
-    signer = CybersourceSigner.new(profile)
-    @payment = Payment.new(signer, profile)
-    render :new
+    setup_payment_form
+    render :pay
   end
 
   private
@@ -32,4 +26,14 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def setup_payment_form
+    profile = Profile.new('pwksgem')
+    signer = CybersourceSigner.new(profile)
+    signature_checker = SignatureChecker.new(profile, params, true)
+    signature_checker.run!
+    @payment = Payment.new(signer, profile, params)
+  rescue Exceptions::CybersourceryError => e
+    flash.now[:alert] = e.message
+    render :error
+  end
 end
