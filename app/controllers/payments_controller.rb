@@ -31,6 +31,8 @@ class PaymentsController < ApplicationController
     signer = CybersourceSigner.new(profile)
     signature_checker = SignatureChecker.new(profile, params, true)
     signature_checker.run!
+    # This can also be called with a block, which will return results for logging
+    #signature_checker.run! { |result| Rails.logger.debug result}
     @payment = Payment.new(signer, profile, params)
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message

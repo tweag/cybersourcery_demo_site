@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe SignatureChecker do
-  let(:profile) { double :profile, secret_key: 'SECRET_KEY' }
+  let(:profile) { double :profile, profile_id: 'pwksgem', secret_key: 'SECRET_KEY' }
   let(:signature) { 'vWV/HxXelIWsO0tkLZe+H1S6tXflgPz79udP0uXrvPI=' }
 
   context 'Checking signature when returning from a successful Cybersource transaction' do
@@ -30,6 +30,18 @@ describe SignatureChecker do
           'Detected possible data tampering. Signatures do not match.'
         )
       end
+
+      it 'yields data about the transaction if passed a block' do
+        checker = SignatureChecker.new(profile, params)
+        checker.run! { |results|
+          expect(results).to match a_hash_including(
+            signature_valid: true,
+            profile_id: 'pwksgem',
+            params: params
+          )
+        }
+      end
+
     end
   end
 
