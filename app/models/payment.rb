@@ -36,18 +36,6 @@ class Payment
   end
 
   def sign_cybersource_fields
-    # We're reserving merchant defined data fields 99 and 100 for fields we will need in the case of
-    # a failed transaction, so we can re-create the state of the submission from the cart to the
-    # credit card payment form.
-
-    if @params['merchant_defined_data99'].blank?
-      @params['merchant_defined_data99'] = @params['signed_field_names']
-    end
-
-    if @params['merchant_defined_data100'].blank?
-      @params['merchant_defined_data100'] = @params['signature']
-    end
-
     @signer.sign_cybersource_fields(@params)
   end
 end
