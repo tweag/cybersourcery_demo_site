@@ -15,6 +15,8 @@ class SignatureChecker
     raise Exceptions::CybersourceryError, 'Detected possible data tampering. Signatures do not match.' unless run
   end
 
+  private
+
   def signature_message
     signed_fields_keys = signed_field_names.split(',')
     signed_fields = @params.select { |k, v| signed_fields_keys.include? k }
