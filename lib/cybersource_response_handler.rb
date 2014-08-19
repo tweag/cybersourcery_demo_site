@@ -47,10 +47,9 @@ class CybersourceResponseHandler
     @profile = profile
   end
 
-  def run
-    @signature_checker.run!
+  def run(&block)
+    @signature_checker.run!(&block)
     check_for_transaction_errors
-    # TODO: add logging hook
     @profile.success_url
   end
 
