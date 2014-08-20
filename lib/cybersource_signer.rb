@@ -5,74 +5,52 @@ class CybersourceSigner
   attr_accessor :profile, :signer
   attr_writer   :time
   attr_writer   :form_fields
-  attr_reader   :cybersource_fields
+  attr_reader   :unsigned_field_names, :signable_fields
 
-  UNSIGNED_FIELD_NAMES = %w[
-    bill_to_email
-    bill_to_forename
-    bill_to_surname
-    bill_to_address_line1
-    bill_to_address_line2
-    bill_to_address_country
-    bill_to_address_state
-    bill_to_address_postal_code
-    bill_to_address_city
-    card_cvn
-    card_expiry_date
-    card_number
-    card_type
+  IGNORE_FIELDS = %i[
+    commit
+    utf8
+    authenticity_token
+    action
+    controller
   ]
 
-  def initialize(profile, signer = Signer)
+  def initialize(profile, unsigned_field_names = [], signer = Signer)
     @profile              = profile
     @signer               = signer
-    @cybersource_fields   = {
+    @unsigned_field_names = unsigned_field_names
+    @signable_fields      = {
       access_key:           @profile.access_key,
       profile_id:           @profile.profile_id,
       payment_method:       "card",
       locale:               "en",
-      transaction_type:     "sale", # TODO: transaction_type will be variable
+      transaction_type:     @profile.transaction_type,
       currency:             "USD"
     }
   end
 
-  def sign_cybersource_fields(params)
-    add_cybersource_fields(params)
+  def add_and_sign_fields(params)
+    add_signable_fields(params)
     sign_fields
   end
 
-  def add_cybersource_fields(params)
-    filtered_params = params.select do |key, value|
-      result = false
-
-      if key == 'amount'
-        result = true
-      else
-        match_data = /^merchant_defined_data(\d{1,3})$/.match(key)
-
-        if match_data.present?
-          result = match_data[1].to_i > 0 && match_data[1].to_i < 101
-        end
-      end
-
-      result
-    end
-
-    filtered_params_with_sym_keys = Hash[filtered_params.map{|(k,v)| [k.to_sym,v]}]
-    cybersource_fields.merge!(filtered_params_with_sym_keys)
+  def add_signable_fields(params)
+    @signable_fields.merge! params.symbolize_keys.delete_if { |k,v|
+      @unsigned_field_names.include?(k) || IGNORE_FIELDS.include?(k)
+    }
   end
 
   def sign_fields
     form_fields.tap do |data|
-      signature_keys = data[:signed_field_names].split(",").map { |e| e.to_sym}
+      signature_keys = data[:signed_field_names].split(',').map { |e| e.to_sym}
       signature_message = self.class.signature_message(data, signature_keys)
       data[:signature]  = signer.signature(signature_message, profile.secret_key)
     end
   end
 
   def form_fields
-    @form_fields ||= cybersource_fields.dup.merge(
-      unsigned_field_names: CybersourceSigner::UNSIGNED_FIELD_NAMES.join(','),
+    @form_fields ||= signable_fields.dup.merge(
+      unsigned_field_names: @unsigned_field_names.map { |e| e.to_s }.join(','),
       transaction_uuid:     SecureRandom.hex(16),
       reference_number:     SecureRandom.hex(16)
     ).tap do |data|

@@ -9,7 +9,7 @@
 
       = hidden_input f, :card_expiry_date
 
-      - @payment.sign_cybersource_fields.each do |field, value|
+      - @payment.signed_fields.each do |field, value|
         = hidden_input f, field, value
 
       fieldset
