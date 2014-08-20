@@ -11,8 +11,8 @@ class PaymentsController < ApplicationController
     profile = Profile.new('pwksgem')
     signature_checker = SignatureChecker.new(profile, params)
     response_handler = CybersourceResponseHandler.new(params, signature_checker, profile)
-    Rails.logger.debug 'WE ARE HERE ******'
-    redirect_to response_handler.run { |result| Rails.logger.debug result}
+    Rails.logger.info 'WE ARE HERE ******'
+    redirect_to response_handler.run { |result| Rails.logger.info result}
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
     setup_payment_form
