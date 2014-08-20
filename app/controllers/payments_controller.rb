@@ -22,7 +22,8 @@ class PaymentsController < ApplicationController
     setup_payment_form
   end
 
-  # This receives a POST from Cybersource, which handles the transaction itself.
+  # This receives a POST from the hidden form dynamically rendered in the user's browser by
+  # Cybersource.
   def confirm
     profile = Profile.new('pwksgem')
     signature_checker = SignatureChecker.new(profile, params)
