@@ -12,7 +12,7 @@ class PaymentsController < ApplicationController
     signature_checker = SignatureChecker.new(profile, params)
     response_handler = CybersourceResponseHandler.new(params, signature_checker, profile)
     Rails.logger.info 'WE ARE HERE ******'
-    redirect_url = response_handler.run { |result| Rails.logger.info result}
+    redirect_url = response_handler.run lambda { |result| Rails.logger.info result}
     redirect_to redirect_url
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
@@ -32,9 +32,10 @@ class PaymentsController < ApplicationController
     profile = Profile.new('pwksgem')
     signer = CybersourceSigner.new(profile)
     signature_checker = SignatureChecker.new(profile, params, true)
-    signature_checker.run!
+    #signature_checker.run!
     # This can also be called with a block, which will return results for logging
-    #signature_checker.run! { |result| Rails.logger.debug result}
+    Rails.logger.info 'WE ARE HERE ******'
+    signature_checker.run! lambda { |result| Rails.logger.info result}
     @payment = Payment.new(signer, profile, params)
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message

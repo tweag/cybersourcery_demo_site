@@ -47,9 +47,9 @@ class CybersourceResponseHandler
     @profile = profile
   end
 
-  def run(&block)
-    if block_given?
-      yield(@signature_checker.run!(&block))
+  def run(block = nil)
+    if block.present?
+      block.call(@signature_checker.run! block)
     else
       @signature_checker.run!
     end
