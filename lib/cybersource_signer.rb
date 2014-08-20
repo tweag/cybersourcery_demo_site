@@ -31,7 +31,7 @@ class CybersourceSigner
       profile_id:           @profile.profile_id,
       payment_method:       "card",
       locale:               "en",
-      transaction_type:     "sale", # TODO: transaction_type will be variable
+      transaction_type:     @profile.transaction_type,
       currency:             "USD"
     }
   end
