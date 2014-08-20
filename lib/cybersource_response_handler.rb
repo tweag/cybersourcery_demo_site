@@ -48,7 +48,12 @@ class CybersourceResponseHandler
   end
 
   def run(&block)
-    @signature_checker.run!(&block)
+    if block_given?
+      yield(@signature_checker.run!(&block))
+    else
+      @signature_checker.run!
+    end
+
     check_for_transaction_errors
     @profile.success_url
   end
