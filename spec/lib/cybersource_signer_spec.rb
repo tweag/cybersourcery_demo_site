@@ -43,7 +43,8 @@ describe CybersourceSigner do
         'amount' => '60',
         'merchant_defined_data1' => '2014',
         'merchant_defined_data100' => '2015',
-        'bill_to_email' => 'joe@blow.com' # this should get rejected, since it's an unsigned field
+        'bill_to_email' => 'joe@blow.com', # this should be filtered out, since it's an unsigned field
+        'action' => 'pay' # this should be filtered out, since it's an ignored field
       }
       cybersource_signer.add_signable_fields(params)
 

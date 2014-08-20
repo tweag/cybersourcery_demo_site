@@ -7,6 +7,14 @@ class CybersourceSigner
   attr_writer   :form_fields
   attr_reader   :unsigned_field_names, :signable_fields
 
+  IGNORE_FIELDS = %i[
+    commit
+    utf8
+    authenticity_token
+    action
+    controller
+  ]
+
   def initialize(profile, unsigned_field_names = [], signer = Signer)
     @profile              = profile
     @signer               = signer
@@ -27,7 +35,9 @@ class CybersourceSigner
   end
 
   def add_signable_fields(params)
-    @signable_fields.merge! params.symbolize_keys.delete_if { |k,v| @unsigned_field_names.include? k }
+    @signable_fields.merge! params.symbolize_keys.delete_if { |k,v|
+      @unsigned_field_names.include?(k) || IGNORE_FIELDS.include?(k)
+    }
   end
 
   def sign_fields
