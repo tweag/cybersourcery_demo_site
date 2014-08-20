@@ -47,13 +47,8 @@ class CybersourceResponseHandler
     @profile = profile
   end
 
-  def run(block = nil)
-    if block.present?
-      block.call(@signature_checker.run! block)
-    else
-      @signature_checker.run!
-    end
-
+  def run(&block)
+    @signature_checker.run!(&block)
     check_for_transaction_errors
     @profile.success_url
   end

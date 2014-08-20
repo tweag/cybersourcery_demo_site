@@ -7,11 +7,11 @@ class SignatureChecker
     @check_merchant_fields = check_merchant_fields
   end
 
-  def run(block = nil)
+  def run
     signature_valid = signature == CybersourceSigner::Signer.signature(signature_message, @profile.secret_key)
 
-    if block.present?
-      block.call({
+    if block_given?
+      yield({
         signature_valid: signature_valid,
         profile_id: @profile.profile_id,
         params: @params
@@ -21,8 +21,8 @@ class SignatureChecker
     signature_valid
   end
 
-  def run!(block = nil)
-    raise Exceptions::CybersourceryError, 'Detected possible data tampering. Signatures do not match.' unless run(block)
+  def run!(&block)
+    raise Exceptions::CybersourceryError, 'Detected possible data tampering. Signatures do not match.' unless run(&block)
   end
 
   private
