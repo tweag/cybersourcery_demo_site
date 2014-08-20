@@ -6,7 +6,7 @@ describe Payment do
   let(:cybersource_signer) do
     double(
       :cybersource_signer,
-      sign_cybersource_fields: {
+      add_and_sign_fields: {
         payment_method: 'card',
         locale: 'en',
         signature: 'SUPER_SECURE_SIGNATURE'
@@ -31,7 +31,7 @@ describe Payment do
 
   describe '#sign_cybersource_fields' do
     it 'returns the signed cybersource fields' do
-      expect(payment.sign_cybersource_fields).to eq cybersource_signer.sign_cybersource_fields
+      expect(payment.signed_fields).to eq cybersource_signer.add_and_sign_fields
     end
   end
 end

@@ -35,7 +35,7 @@ class Payment
     @profile.transaction_url
   end
 
-  def sign_cybersource_fields
-    @signer.sign_cybersource_fields(@params)
+  def signed_fields
+    @signer.add_and_sign_fields(@params)
   end
 end
