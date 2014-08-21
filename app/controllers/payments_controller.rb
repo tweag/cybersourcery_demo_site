@@ -26,7 +26,7 @@ class PaymentsController < ApplicationController
   # Cybersource.
   def confirm
     profile = Profile.new('pwksgem')
-    signature_checker = SignatureChecker.new(profile, params)
+    signature_checker = SignatureChecker.new_cybersource_checker(profile, params)
     response_handler = CybersourceResponseHandler.new(params, signature_checker, profile)
     redirect_to response_handler.run
   rescue Exceptions::CybersourceryError => e
@@ -46,7 +46,7 @@ class PaymentsController < ApplicationController
   def setup_payment_form
     profile = Profile.new('pwksgem')
     signer = CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
-    signature_checker = SignatureChecker.new(profile, params, true)
+    signature_checker = SignatureChecker.new_cart_checker(profile, params)
     signature_checker.run!
     @payment = MyPayment.new(signer, profile, params)
   rescue Exceptions::CybersourceryError => e

@@ -18,30 +18,18 @@ describe SignatureChecker do
 
     describe '#run!' do
       it 'does not raise an exception when the signatures match' do
-        checker = SignatureChecker.new(profile, params)
+        checker = SignatureChecker.new_cybersource_checker(profile, params)
         expect(checker.run!).to be_nil
       end
 
       it 'raises an exception when the signatures do not match' do
         params['access_key'] = 'TAMPERED_KEY'
-        checker = SignatureChecker.new(profile, params)
+        checker = SignatureChecker.new_cybersource_checker(profile, params)
         expect { checker.run! }.to raise_exception(
           Exceptions::CybersourceryError,
           'Detected possible data tampering. Signatures do not match.'
         )
       end
-
-      it 'yields data about the transaction if passed a block' do
-        checker = SignatureChecker.new(profile, params)
-        checker.run! { |results|
-          expect(results).to match a_hash_including(
-            signature_valid: true,
-            profile_id: 'pwksgem',
-            params: params
-          )
-        }
-      end
-
     end
   end
 
@@ -59,13 +47,13 @@ describe SignatureChecker do
 
     describe '#run!' do
       it 'does not raise an exception when the signatures match' do
-        checker = SignatureChecker.new(profile, params, true)
+        checker = SignatureChecker.new_cart_checker(profile, params)
         expect(checker.run!).to be_nil
       end
 
       it 'raises an exception when the signatures do not match' do
         params['access_key'] = 'TAMPERED_KEY'
-        checker = SignatureChecker.new(profile, params, true)
+        checker = SignatureChecker.new_cart_checker(profile, params)
         expect { checker.run! }.to raise_exception(
           Exceptions::CybersourceryError,
           'Detected possible data tampering. Signatures do not match.'
