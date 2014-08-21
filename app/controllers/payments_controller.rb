@@ -48,7 +48,7 @@ class PaymentsController < ApplicationController
     signer = CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
     signature_checker = SignatureChecker.new(profile, params, true)
     signature_checker.run!
-    @payment = Payment.new(signer, profile, params)
+    @payment = MyPayment.new(signer, profile, params)
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
     render :error
