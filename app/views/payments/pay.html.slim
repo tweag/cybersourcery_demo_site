@@ -4,6 +4,7 @@
 
     = simple_form_for @payment,
         url: @payment.form_action_url,
+        as: :payment,
         html: { class: 'form-horizontal', role: 'form' },
         wrapper: :horizontal_form do |f|
 
@@ -34,6 +35,7 @@
       fieldset
         legend Billing Address
 
+        = simple_form_input f, :bill_to_phone, params[:bill_to_phone]
         = simple_form_input f, :bill_to_email, params[:bill_to_email]
         = simple_form_select f, :bill_to_address_country, countries, (params[:bill_to_address_country].present? ? params[:bill_to_address_country] : 'US')
         = simple_form_input f, :bill_to_address_line1, params[:bill_to_address_line1]

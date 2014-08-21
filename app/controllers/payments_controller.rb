@@ -22,14 +22,14 @@ class PaymentsController < ApplicationController
     setup_payment_form
   end
 
-  # This receives a POST from Cybersource, which handles the transaction itself.
+  # This receives a POST from the hidden form dynamically rendered in the user's browser by
+  # Cybersource.
   def confirm
     profile = Profile.new('pwksgem')
-    signature_checker = SignatureChecker.new(profile, params)
-    response_handler = CybersourceResponseHandler.new(params, signature_checker, profile)
-    redirect_to response_handler.run
-    # This can also be called with a block, which will return results for logging
-    #redirect_to response_handler.run { |result| Rails.logger.info result[:params]['payment_token'] }
+    signature_checker = SignatureChecker.new_cybersource_checker(profile, params)
+    signature_checker.run!
+    ReasonCodeChecker::run!(params[:reason_code])
+    redirect_to profile.success_url # this is optional
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
     setup_payment_form
@@ -47,11 +47,9 @@ class PaymentsController < ApplicationController
   def setup_payment_form
     profile = Profile.new('pwksgem')
     signer = CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
-    signature_checker = SignatureChecker.new(profile, params, true)
+    signature_checker = SignatureChecker.new_cart_checker(profile, params)
     signature_checker.run!
-    # This can also be called with a block, which will return results for logging
-    #signature_checker.run! { |result| Rails.logger.info result }
-    @payment = Payment.new(signer, profile, params)
+    @payment = MyPayment.new(signer, profile, params)
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
     render :error

@@ -1,8 +1,8 @@
-class CybersourceResponseHandler
+class ReasonCodeChecker
 
   # thank you FoxyCart!
   # https://forum.foxycart.com/discussion/311/customizing-payment-gateway-reason-code-messages-in-foxycart/p1
-  RESPONSE_CODE_EXPLANATIONS = {
+  REASON_CODE_EXPLANATIONS = {
     '100' => 'Successful transaction.',
     '101' => 'Declined: The request is missing one or more required fields.',
     '102' => 'Declined: One or more fields in the request contains invalid data',
@@ -41,24 +41,18 @@ class CybersourceResponseHandler
     '250' => 'Error: The request was received, but there was a timeout at the payment processor'
   }
 
-  def initialize(params, signature_checker, profile)
-    @params = params
-    @signature_checker = signature_checker
-    @profile = profile
+  def self.run(reason_code)
+    REASON_CODE_EXPLANATIONS.fetch(
+      reason_code,
+      "Declined: unknown reason (code #{reason_code})"
+    )
   end
 
-  def run(&block)
-    @signature_checker.run!(&block)
-    check_for_transaction_errors
-    @profile.success_url
-  end
-
-  def check_for_transaction_errors
-    unless @params['reason_code'] == '100'
-      raise Exceptions::CybersourceryError, RESPONSE_CODE_EXPLANATIONS.fetch(
-        @params['reason_code'],
-        "Declined: unknown reason (code #{@params['reason_code']})"
-      )
+  def self.run!(reason_code)
+    if reason_code == '100'
+      self.run(reason_code)
+    else
+      raise Exceptions::CybersourceryError, self.run(reason_code)
     end
   end
 end
