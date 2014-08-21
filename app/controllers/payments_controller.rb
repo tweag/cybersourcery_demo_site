@@ -27,8 +27,9 @@ class PaymentsController < ApplicationController
   def confirm
     profile = Profile.new('pwksgem')
     signature_checker = SignatureChecker.new_cybersource_checker(profile, params)
-    response_handler = CybersourceResponseHandler.new(params, signature_checker, profile)
-    redirect_to response_handler.run
+    signature_checker.run!
+    ReasonCodeChecker::run!(params[:reason_code])
+    redirect_to profile.success_url # this is optional
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
     setup_payment_form
