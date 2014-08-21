@@ -4,6 +4,7 @@
 
     = simple_form_for @payment,
         url: @payment.form_action_url,
+        as: :payment,
         html: { class: 'form-horizontal', role: 'form' },
         wrapper: :horizontal_form do |f|
 
