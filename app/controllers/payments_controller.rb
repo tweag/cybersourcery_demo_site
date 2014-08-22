@@ -28,8 +28,10 @@ class PaymentsController < ApplicationController
     profile = Profile.new('pwksgem')
     signature_checker = SignatureChecker.new_cybersource_checker(profile, params)
     signature_checker.run!
-    ReasonCodeChecker::run!(params[:reason_code])
-    redirect_to profile.success_url # this is optional
+    flash.now[:notice] = ReasonCodeChecker::run!(params[:reason_code])
+    serializer = MerchantDataSerializer.new
+    @merchant_data = serializer.deserialize(params)
+    #redirect_to profile.success_url # this is optional
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
     setup_payment_form
