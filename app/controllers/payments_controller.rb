@@ -34,6 +34,7 @@ class PaymentsController < ApplicationController
     #redirect_to profile.success_url # this is optional
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
+    # if there was an exception in setup_payment_form, it will have already rendered :error
     render :pay if setup_payment_form
   end
 
