@@ -1,22 +1,19 @@
 class SignatureChecker
-  attr_reader :profile, :params, :type
+  attr_reader :profile, :params
 
-  def self.new_cart_checker(profile, params)
-    SignatureChecker.new(profile, params, 'cart')
+  def initialize(args = {})
+    @profile = args[:profile]
+    @params = args[:params]
+    post_initialize(args)
   end
 
-  def self.new_cybersource_checker(profile, params)
-    SignatureChecker.new(profile, params, 'cybersource')
-  end
-
-  def initialize(profile, params, type)
-    @profile = profile
-    @params = params
-    @type = type
+  # subclasses can override
+  def post_initialize(args)
+    nil
   end
 
   def run
-    self.send("#{@type}_signature") == CybersourceSigner::Signer.signature(signature_message, @profile.secret_key)
+    signature == CybersourceSigner::Signer.signature(signature_message, @profile.secret_key)
   end
 
   def run!
@@ -25,25 +22,17 @@ class SignatureChecker
 
   private
 
+  def signed_field_names
+    raise NotImplementedError, "This #{self.class} cannot respond to:"
+  end
+
+  def signature
+    raise NotImplementedError, "This #{self.class} cannot respond to:"
+  end
+
   def signature_message
-    signed_fields_keys = self.send("#{@type}_signed_field_names").split(',')
+    signed_fields_keys = signed_field_names.split(',')
     signed_fields = @params.select { |k, v| signed_fields_keys.include? k }
     CybersourceSigner.signature_message(signed_fields, signed_fields_keys)
-  end
-
-  def cart_signed_field_names
-    @params['merchant_defined_data99']
-  end
-
-  def cybersource_signed_field_names
-    @params['signed_field_names']
-  end
-
-  def cart_signature
-    @params['merchant_defined_data100']
-  end
-
-  def cybersource_signature
-    @params['signature']
   end
 end
