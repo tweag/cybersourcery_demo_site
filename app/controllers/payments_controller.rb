@@ -26,7 +26,7 @@ class PaymentsController < ApplicationController
   # Cybersource.
   def confirm
     profile = Profile.new('pwksgem')
-    signature_checker = SignatureChecker.new_cybersource_checker(profile, params)
+    signature_checker = CybersourceSignatureChecker.new({ profile: profile, params: params })
     signature_checker.run!
     flash.now[:notice] = ReasonCodeChecker::run!(params[:reason_code])
     serializer = MerchantDataSerializer.new
@@ -48,9 +48,9 @@ class PaymentsController < ApplicationController
 
   def setup_payment_form
     profile = Profile.new('pwksgem')
-    signer = CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
-    signature_checker = SignatureChecker.new_cart_checker(profile, params)
+    signature_checker = CartSignatureChecker.new({ profile: profile, params: params, session: session})
     signature_checker.run!
+    signer = CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
     @payment = MyPayment.new(signer, profile, params)
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
