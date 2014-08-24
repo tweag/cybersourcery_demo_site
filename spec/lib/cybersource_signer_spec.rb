@@ -56,9 +56,9 @@ describe CybersourceSigner do
     end
   end
 
-  describe '#sign_fields' do
+  describe '#signed_fields' do
     it 'creates a signature' do
-      signed_fields = cybersource_signer.sign_fields
+      signed_fields = cybersource_signer.signed_fields
       expect(signed_fields[:signature]).to eq signature
     end
   end
