@@ -34,8 +34,7 @@ class PaymentsController < ApplicationController
     #redirect_to profile.success_url # this is optional
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
-    setup_payment_form
-    render :pay
+    render :pay if setup_payment_form
   end
 
   private
@@ -52,8 +51,10 @@ class PaymentsController < ApplicationController
     signature_checker.run!
     signer = CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
     @payment = MyPayment.new(signer, profile, params)
+    true
   rescue Exceptions::CybersourceryError => e
-    flash.now[:alert] = e.message
+    flash.now[:alert].present? ? flash.now[:alert] << " #{e.message}" : e.message
     render :error
+    false
   end
 end
