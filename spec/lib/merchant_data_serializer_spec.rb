@@ -17,7 +17,7 @@ describe MerchantDataSerializer do
       expect(serialized_data[:merchant_defined_data23]).to eq '6width=1200\u0026height=2000\u0026delay=500\u0026format=pdf"}'
     end
 
-    it 'raises an exception if the count of merchant fields exceeds 98' do
+    it 'raises an exception if the count of merchant fields exceeds 100' do
       serializer = MerchantDataSerializer.new(90)
       expect { serializer.serialize(merchant_data) }.to raise_exception Exceptions::CybersourceryError
     end

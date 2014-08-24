@@ -12,8 +12,8 @@ class MerchantDataSerializer
     scanned_data.each_with_index do |item, index|
       count = index + @start_count
 
-      if count < 1 || count > 98
-        raise Exceptions::CybersourceryError, "The supported merchant_defined_data range is 1 to 98. #{count} is out of range."
+      if count < 1 || count > 100
+        raise Exceptions::CybersourceryError, "The supported merchant_defined_data range is 1 to 100. #{count} is out of range."
       end
 
       serialized_data["merchant_defined_data#{count}".to_sym] = item
