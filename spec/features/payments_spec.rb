@@ -34,7 +34,7 @@ feature 'Payments' do
       fill_in 'card_number', with: '4111111111111111'
       click_button 'Submit'
 
-      expect(page).to have_content 'Made it!'
+      expect(page).to have_content 'Successful transaction'
     end
 
     scenario 'Fails to complete a transaction with an invalid credit card', js: true do
