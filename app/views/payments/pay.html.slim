@@ -8,10 +8,7 @@
         html: { class: 'form-horizontal', role: 'form' },
         wrapper: :horizontal_form do |f|
 
-      = hidden_input f, :card_expiry_date
-
-      - @payment.signed_fields.each do |field, value|
-        = hidden_input f, field, value
+      = add_signed_fields(@payment, f).html_safe
 
       fieldset
         legend Credit Card Information
@@ -19,16 +16,7 @@
         = simple_form_input f, :bill_to_forename, params[:bill_to_forename]
         = simple_form_input f, :bill_to_surname, params[:bill_to_surname]
         = simple_form_input f, :card_number
-        = f.input :card_expiry_dummy, label: field_label(:card_expiry_dummy) do
-          = f.date_select :card_expiry_dummy,
-            { discard_day: true,
-              order: [:month, :year],
-              start_year: Date.today.year,
-              end_year:  (Date.today.year + 19),
-              use_two_digit_numbers: true,
-              date_separator: ' / ',
-              prompt: true },
-            { :class => 'select required form-control card-expiry' }
+        = add_expiry_date_fields(f).html_safe
         = simple_form_input f, :card_cvn
         = simple_form_select f, :card_type, card_types, nil, true
 

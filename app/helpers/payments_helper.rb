@@ -1,4 +1,14 @@
 module PaymentsHelper
+  def add_signed_fields(payment, form)
+    signed_fields = ''
+
+    payment.signed_fields.each do |field, value|
+      signed_fields << hidden_input(form, field, value)
+    end
+
+    signed_fields
+  end
+
   def simple_form_input(form, field, value = nil)
     form.input field, label: field_label(field), input_html: { name: field.to_s, value: value }
   end
@@ -33,6 +43,24 @@ module PaymentsHelper
 
   def hidden_input(form, field, value = nil)
     form.hidden_field field, value: value, name: field.to_s
+  end
+
+  def add_expiry_date_fields(form, classes = 'select required form-control card-expiry')
+    date_fields =  hidden_input form, :card_expiry_date
+    date_fields << form.input(:card_expiry_dummy, label: field_label(:card_expiry_dummy)) do
+      form.date_select(:card_expiry_dummy,
+        {
+          discard_day: true,
+          order: [:month, :year],
+          start_year: Date.today.year,
+          end_year:  (Date.today.year + 19),
+          use_two_digit_numbers: true,
+          date_separator: ' / ',
+          prompt: true
+        },
+        { class: classes }
+      )
+    end
   end
 
   def countries
