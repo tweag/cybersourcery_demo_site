@@ -10,7 +10,12 @@ module PaymentsHelper
   end
 
   def simple_form_input(form, field, value = nil)
-    form.input field, label: field_label(field), input_html: { name: field.to_s, value: value }
+    form.input field, label: field_label(field), input_html: {
+      name: field.to_s,
+      value: value,
+      pattern: field_pattern(field),
+      title: field_validation_message(field)
+    }
   end
 
   def simple_form_select(form, field, collection, selected = nil, prompt = nil)
@@ -39,6 +44,20 @@ module PaymentsHelper
       bill_to_address_postal_code: 'Zip (Postal Code)'
     }
     labels[field]
+  end
+
+  def field_pattern(field)
+    patterns = {
+      card_number: "^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$"
+    }
+    patterns[field]
+  end
+
+  def field_validation_message(field)
+    patterns = {
+      card_number: 'Please enter a valid credit card number'
+    }
+    patterns[field]
   end
 
   def hidden_input(form, field, value = nil)
