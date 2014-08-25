@@ -26,14 +26,16 @@ class PaymentsController < ApplicationController
   # Cybersource.
   def confirm
     profile = Profile.new('pwksgem')
-    signature_checker = SignatureChecker.new_cybersource_checker(profile, params)
+    signature_checker = CybersourceSignatureChecker.new({ profile: profile, params: params })
     signature_checker.run!
-    ReasonCodeChecker::run!(params[:reason_code])
-    redirect_to profile.success_url # this is optional
+    flash.now[:notice] = ReasonCodeChecker::run!(params[:reason_code])
+    serializer = MerchantDataSerializer.new
+    @merchant_data = serializer.deserialize(params)
+    #redirect_to profile.success_url # this is optional
   rescue Exceptions::CybersourceryError => e
     flash.now[:alert] = e.message
-    setup_payment_form
-    render :pay
+    # if there was an exception in setup_payment_form, it will have already rendered :error
+    render :pay if setup_payment_form
   end
 
   private
@@ -46,12 +48,15 @@ class PaymentsController < ApplicationController
 
   def setup_payment_form
     profile = Profile.new('pwksgem')
-    signer = CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
-    signature_checker = SignatureChecker.new_cart_checker(profile, params)
+    signature_checker = CartSignatureChecker.new({ profile: profile, params: params, session: session})
     signature_checker.run!
+    signer = CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
     @payment = MyPayment.new(signer, profile, params)
+    true
   rescue Exceptions::CybersourceryError => e
-    flash.now[:alert] = e.message
+    # if there was an exception in confirm(), there will already be a flash message
+    flash.now[:alert].present? ? flash.now[:alert] << " #{e.message}" : e.message
     render :error
+    false
   end
 end

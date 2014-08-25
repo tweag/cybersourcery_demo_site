@@ -31,7 +31,7 @@ class CybersourceSigner
 
   def add_and_sign_fields(params)
     add_signable_fields(params)
-    sign_fields
+    signed_fields
   end
 
   def add_signable_fields(params)
@@ -40,7 +40,7 @@ class CybersourceSigner
     }
   end
 
-  def sign_fields
+  def signed_fields
     form_fields.tap do |data|
       signature_keys = data[:signed_field_names].split(',').map { |e| e.to_sym}
       signature_message = self.class.signature_message(data, signature_keys)
@@ -66,18 +66,6 @@ class CybersourceSigner
 
   def self.signature_message(hash, keys)
     keys.map {|key| "#{key}=#{hash.fetch(key)}" }.join(',')
-  end
-
-  # For the cart, we put the signed field names in merchant_defined_data99, and the signature in
-  # merchant_defined_data100. This allows us to show the payment form again, with the original
-  # cart data, if there is a failed transaction.
-  def sign_cart_fields(fields)
-    fields[:signed_field_names] = fields.keys.join(',')
-    self.form_fields = fields
-    signed_cart_fields = sign_fields
-    signed_cart_fields[:merchant_defined_data99] = signed_cart_fields.delete :signed_field_names
-    signed_cart_fields[:merchant_defined_data100] = signed_cart_fields.delete :signature
-    signed_cart_fields
   end
 
   class Signer
