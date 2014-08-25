@@ -54,6 +54,7 @@ class PaymentsController < ApplicationController
     @payment = MyPayment.new(signer, profile, params)
     true
   rescue Exceptions::CybersourceryError => e
+    # if there was an exception in confirm(), there will already be a flash message
     flash.now[:alert].present? ? flash.now[:alert] << " #{e.message}" : e.message
     render :error
     false
