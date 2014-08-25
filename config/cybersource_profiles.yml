@@ -6,6 +6,9 @@ acptfee:
   success_url:
   transaction_type: sale
   endpoint_type: standard
+  payment_method: card
+  locale: en-us
+  currency: USD
 pwksgem:
   name: PromptWorks Gem
   service: test
@@ -14,3 +17,6 @@ pwksgem:
   success_url: /responses
   transaction_type: sale,create_payment_token
   endpoint_type: standard
+  payment_method: card
+  locale: en-us
+  currency: USD

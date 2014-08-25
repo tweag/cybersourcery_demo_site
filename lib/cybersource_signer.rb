@@ -22,10 +22,10 @@ class CybersourceSigner
     @signable_fields      = {
       access_key:           @profile.access_key,
       profile_id:           @profile.profile_id,
-      payment_method:       "card",
-      locale:               "en",
+      payment_method:       @profile.payment_method,
+      locale:               @profile.locale,
       transaction_type:     @profile.transaction_type,
-      currency:             "USD"
+      currency:             @profile.currency
     }
   end
 

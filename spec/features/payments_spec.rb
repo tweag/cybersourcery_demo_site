@@ -38,7 +38,7 @@ feature 'Payments' do
     end
 
     scenario 'Fails to complete a transaction with an invalid credit card', js: true do
-      fill_in 'card_number', with: '3111111111111111'
+      fill_in 'card_number', with: '4111111111111112'
       click_button 'Submit'
 
       expect(page).to have_content 'Declined: One or more fields in the request contains invalid data'

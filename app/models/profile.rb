@@ -14,10 +14,13 @@ class Profile
   }
 
   attr_accessor :profile_id, :name, :service, :access_key, :secret_key, :success_url,
-                :transaction_type, :endpoint_type
+                :transaction_type, :endpoint_type, :payment_method, :locale, :currency
   validates_presence_of :profile_id, :name, :service, :access_key, :secret_key
-  validates_inclusion_of :service, :in => %w(test live), allow_nil: false
-  validates_inclusion_of :endpoint_type, :in => VALID_ENDPOINTS.keys, allow_nil: false
+  validates_inclusion_of :service, in: %w(test live), allow_nil: false
+  validates_inclusion_of :endpoint_type, in: VALID_ENDPOINTS.keys, allow_nil: false
+  validates_inclusion_of :payment_method, in: %w(card echeck), allow_nil: false
+  validates_format_of :locale, with: /\A[a-z]{2}-[a-z]{2}\Z/, allow_nil: false
+  validates_format_of :currency, with: /\A[A-Z]{3}\Z/, allow_nil: false
 
   def initialize(profile_id, profiles = CYBERSOURCE_PROFILES)
     profiles[profile_id].each do |k,v|
