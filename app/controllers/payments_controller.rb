@@ -25,14 +25,14 @@ class PaymentsController < ApplicationController
   # This receives a POST from the hidden form dynamically rendered in the user's browser by
   # Cybersource.
   def confirm
-    profile = Profile.new('pwksgem')
-    signature_checker = CybersourceSignatureChecker.new({ profile: profile, params: params })
+    profile = Cybersourcery::Profile.new('pwksgem')
+    signature_checker = Cybersourcery::CybersourceSignatureChecker.new({ profile: profile, params: params })
     signature_checker.run!
-    flash.now[:notice] = ReasonCodeChecker::run!(params[:reason_code])
-    serializer = MerchantDataSerializer.new
+    flash.now[:notice] = Cybersourcery::ReasonCodeChecker::run!(params[:reason_code])
+    serializer = Cybersourcery::MerchantDataSerializer.new
     @merchant_data = serializer.deserialize(params)
     #redirect_to profile.success_url # this is optional
-  rescue Exceptions::CybersourceryError => e
+  rescue Cybersourcery::CybersourceryError => e
     flash.now[:alert] = e.message
     # if there was an exception in setup_payment_form, it will have already rendered :error
     render :pay if setup_payment_form
@@ -47,13 +47,13 @@ class PaymentsController < ApplicationController
   end
 
   def setup_payment_form
-    profile = Profile.new('pwksgem')
-    signature_checker = CartSignatureChecker.new({ profile: profile, params: params, session: session})
+    profile = Cybersourcery::Profile.new('pwksgem')
+    signature_checker = Cybersourcery::CartSignatureChecker.new({ profile: profile, params: params, session: session})
     signature_checker.run!
-    signer = CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
-    @payment = MyPayment.new(signer, profile, params)
+    signer = Cybersourcery::CybersourceSigner.new(profile, UNSIGNED_FIELD_NAMES)
+    @payment = Cybersourcery::MyPayment.new(signer, profile, params)
     true
-  rescue Exceptions::CybersourceryError => e
+  rescue Cybersourcery::CybersourceryError => e
     # if there was an exception in confirm(), there will already be a flash message
     flash.now[:alert].present? ? flash.now[:alert] << " #{e.message}" : e.message
     render :error

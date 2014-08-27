@@ -50,6 +50,7 @@ gem 'autoprefixer-rails', '~> 2.2.0.20140727'
 gem 'simple_form', '~> 3.1.0.rc2'
 gem 'pg', '~> 0.17.1'
 gem 'ruby-hmac', '~> 0.4.0'
+gem 'cybersourcery', git: 'https://efcb6ec0daca0c95d920a44d9789ab56b3a6946c:x-oauth-basic@github.com/promptworks/cybersourcery.git'
 
 group :production do
   gem 'rails_12factor', '~> 0.0.2'
