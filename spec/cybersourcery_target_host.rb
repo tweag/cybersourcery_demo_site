@@ -6,7 +6,7 @@ require 'nokogiri'
 require 'webmock'
 
 VCR.configure do |c|
-  c.cassette_library_dir = 'cassettes'
+  c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
   c.allow_http_connections_when_no_cassette = true
   c.register_request_matcher :card_number_equality do |request_1, request_2|
@@ -25,17 +25,11 @@ VCR.configure do |c|
 end
 
 helpers do
-  # # TODO: delete this?
-  # def logger
-  #   request.logger
-  # end
-
-  def sorcery_uri
+  def cybersource_proxy_uri
     "http://#{settings.bind}:#{settings.port}"
   end
 
   def hijack_uri(hijacker, victim)
-    victim = victim.gsub("off/", "")
     hijacker  = URI(hijacker)
     victim    = URI(victim)
     generic   = URI::Generic.build(
@@ -47,7 +41,7 @@ helpers do
     URI(generic.to_s)
   end
 
-  def hijack_body_uris(request, body)
+  def hijack_body_uris(body)
     doc = Nokogiri::HTML(body)
     %w(src href action).each do |attribute|
       doc.xpath("//*[@#{attribute}]").each do |node|
@@ -63,7 +57,7 @@ helpers do
     if URI(victim).absolute? && victim !~ /cybersource/i
       request.referrer
     else
-      sorcery_uri
+      cybersource_proxy_uri
     end
   end
 
@@ -74,19 +68,13 @@ helpers do
     code     = response.code.to_i
     type     = response.content_type
     body     = response.body
-    body     = hijack_body_uris(request, body) if type =~ /html/
+    body     = hijack_body_uris(body) if type =~ /html/
     response = code, { 'Content-Type' => type }, body
     response # Grrr. Rubocop.
   end
 end
 
 get('/') { "It's not a trick it's an illusion" }
-
-post '/off/*' do |path|
-  proxy_request do |uri|
-    Net::HTTP.post_form(uri, params)
-  end
-end
 
 get '/*' do |path|
   proxy_request do |uri|
