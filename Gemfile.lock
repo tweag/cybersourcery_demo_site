@@ -1,6 +1,5 @@
-GIT
-  remote: https://efcb6ec0daca0c95d920a44d9789ab56b3a6946c:x-oauth-basic@github.com/promptworks/cybersourcery.git
-  revision: a8bc0a295ca09660fd4b66e40e342d38cc73039d
+PATH
+  remote: /Users/toppa/Projects/cybersourcery
   specs:
     cybersourcery (0.0.2)
       rails (~> 4.0.9)
@@ -33,9 +32,8 @@ GEM
       multi_json (~> 1.3)
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
+    addressable (2.3.6)
     arel (4.0.2)
-    autoprefixer-rails (2.2.0.20140727)
-      execjs
     bootstrap-sass (3.2.0.1)
       sass (~> 3.2)
     builder (3.1.4)
@@ -54,6 +52,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.1)
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
     database_cleaner (1.3.0)
     diff-lcs (1.2.5)
     erubis (2.7.0)
@@ -80,8 +80,14 @@ GEM
     pg (0.17.1)
     polyglot (0.3.5)
     rack (1.5.2)
+    rack-protection (1.5.3)
+      rack
+    rack-proxy (0.5.15)
+      rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    rack-translating_proxy (0.1.0)
+      rack-proxy (~> 0.5)
     rails (4.0.9)
       actionmailer (= 4.0.9)
       actionpack (= 4.0.9)
@@ -121,6 +127,7 @@ GEM
     rspec-support (3.0.3)
     ruby-hmac (0.4.0)
     rubyzip (1.1.6)
+    safe_yaml (1.0.3)
     sass (3.2.19)
     sass-rails (4.0.3)
       railties (>= 4.0.0, < 5.0)
@@ -138,6 +145,10 @@ GEM
     simple_form (3.1.0.rc2)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
+    sinatra (1.4.5)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
     slim (2.0.3)
       temple (~> 0.6.6)
       tilt (>= 1.3.3, < 2.1)
@@ -168,6 +179,10 @@ GEM
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    vcr (2.9.2)
+    webmock (1.18.0)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
     websocket (1.0.7)
     xpath (2.0.0)
       nokogiri (~> 1.3)
@@ -176,7 +191,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  autoprefixer-rails (~> 2.2.0.20140727)
   bootstrap-sass (~> 3.2.0.1)
   capybara (~> 2.4.1)
   coffee-rails (~> 4.0.0)
@@ -184,7 +198,9 @@ DEPENDENCIES
   database_cleaner (~> 1.3.0)
   jbuilder (~> 1.2)
   jquery-rails
+  nokogiri
   pg (~> 0.17.1)
+  rack-translating_proxy (~> 0.1.0)
   rails (= 4.0.9)
   rails_12factor (~> 0.0.2)
   rspec-rails (~> 3.0.0)
@@ -193,6 +209,9 @@ DEPENDENCIES
   sdoc
   selenium-webdriver (~> 2.42.0)
   simple_form (~> 3.1.0.rc2)
+  sinatra
   slim-rails (~> 2.1.5)
   turbolinks
   uglifier (>= 1.3.0)
+  vcr
+  webmock

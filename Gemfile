@@ -46,11 +46,11 @@ end
 
 gem 'slim-rails', '~> 2.1.5'
 gem 'bootstrap-sass', '~> 3.2.0.1'
-gem 'autoprefixer-rails', '~> 2.2.0.20140727'
 gem 'simple_form', '~> 3.1.0.rc2'
 gem 'pg', '~> 0.17.1'
 gem 'ruby-hmac', '~> 0.4.0'
-gem 'cybersourcery', git: 'https://efcb6ec0daca0c95d920a44d9789ab56b3a6946c:x-oauth-basic@github.com/promptworks/cybersourcery.git'
+#gem 'cybersourcery', git: 'https://efcb6ec0daca0c95d920a44d9789ab56b3a6946c:x-oauth-basic@github.com/promptworks/cybersourcery.git'
+gem 'cybersourcery', path: '/Users/toppa/Projects/cybersourcery'
 
 group :production do
   gem 'rails_12factor', '~> 0.0.2'
@@ -64,6 +64,11 @@ end
 
 group :test do
   gem 'database_cleaner', '~> 1.3.0'
+  gem 'sinatra'
+  gem 'vcr'
+  gem 'nokogiri'
+  gem 'webmock'
+  gem 'rack-translating_proxy', '~> 0.1.0'
 end
 
 ruby '2.0.0'
