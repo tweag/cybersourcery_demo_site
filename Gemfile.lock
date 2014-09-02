@@ -1,6 +1,6 @@
 GIT
   remote: https://efcb6ec0daca0c95d920a44d9789ab56b3a6946c:x-oauth-basic@github.com/promptworks/cybersourcery.git
-  revision: 036ae90725a46b4693068edc001cb4169fd8bd41
+  revision: a42b94d6fff5314fc0b4263420ffa2ed2db594e1
   specs:
     cybersourcery (0.0.3)
       rails (~> 4.0.9)
@@ -160,12 +160,12 @@ GEM
       activesupport (>= 3.0, < 4.2)
       railties (>= 3.0, < 4.2)
       slim (~> 2.0)
-    sprockets (2.8.0)
+    sprockets (2.11.0)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sprockets-rails (2.1.3)
+    sprockets-rails (2.1.4)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
