@@ -1,9 +1,0 @@
-source 'https://rubygems.org'
-ruby '2.0.0'
-
-gem 'sinatra', '~> 1.4.5'
-gem 'vcr', '~> 2.9.2'
-gem 'webmock', '~> 1.18.0'
-gem 'nokogiri', '~> 1.6.3.1'
-gem 'dotenv', '~> 0.11.1'
-gem 'thin', '~> 1.6.2'
