@@ -1,7 +1,8 @@
-PATH
-  remote: /Users/toppa/Projects/cybersourcery
+GIT
+  remote: https://efcb6ec0daca0c95d920a44d9789ab56b3a6946c:x-oauth-basic@github.com/promptworks/cybersourcery.git
+  revision: 036ae90725a46b4693068edc001cb4169fd8bd41
   specs:
-    cybersourcery (0.0.2)
+    cybersourcery (0.0.3)
       rails (~> 4.0.9)
       ruby-hmac (~> 0.4.0)
 
