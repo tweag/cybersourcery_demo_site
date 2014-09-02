@@ -69,6 +69,7 @@ group :test do
   gem 'nokogiri'
   gem 'webmock'
   gem 'rack-translating_proxy', '~> 0.1.0'
+  gem 'shotgun'
 end
 
 ruby '2.0.0'

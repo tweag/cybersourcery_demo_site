@@ -142,6 +142,8 @@ GEM
       multi_json (~> 1.0)
       rubyzip (~> 1.0)
       websocket (~> 1.0.4)
+    shotgun (0.9)
+      rack (>= 1.0)
     simple_form (3.1.0.rc2)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
@@ -208,6 +210,7 @@ DEPENDENCIES
   sass-rails (~> 4.0.2)
   sdoc
   selenium-webdriver (~> 2.42.0)
+  shotgun
   simple_form (~> 3.1.0.rc2)
   sinatra
   slim-rails (~> 2.1.5)
