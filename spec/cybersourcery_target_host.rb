@@ -4,6 +4,8 @@ require 'json'
 require 'vcr'
 require 'nokogiri'
 require 'webmock'
+require 'cybersourcery'
+require File.expand_path File.dirname(__FILE__) + '/demo/config/initializers/cybersourcery.rb'
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'
@@ -62,8 +64,7 @@ helpers do
   end
 
   def proxy_request
-    #cybersource_uri = hijack_uri(ENV['CYBERSOURCE_HOST'], uri)
-    cybersource_uri = hijack_uri('https://testsecureacceptance.cybersource.com', uri)
+    cybersource_uri = hijack_uri(Cybersourcery.configuration.sop_test_url, uri)
     response = yield(cybersource_uri)
     code     = response.code.to_i
     type     = response.content_type
@@ -84,12 +85,14 @@ end
 
 post '/*' do |path|
   proxy_request do |uri|
-    #if ENV['CYBERSOURCE_REPLAY'] == "true"
-      VCR.use_cassette("SORCERY",
+    if Cybersourcery.configuration.use_vcr_in_tests
+      VCR.use_cassette('cybersourcery',
         record: :new_episodes,
         match_requests_on: %i(method uri card_number_equality)) do
         Net::HTTP.post_form(uri, params)
       end
-    #end
+    else
+      Net::HTTP.post_form(uri, params)
+    end
   end
 end
