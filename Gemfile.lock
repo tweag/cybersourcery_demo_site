@@ -1,9 +1,9 @@
 GIT
   remote: https://efcb6ec0daca0c95d920a44d9789ab56b3a6946c:x-oauth-basic@github.com/promptworks/cybersourcery.git
-  revision: a42b94d6fff5314fc0b4263420ffa2ed2db594e1
+  revision: 767b77b75ea5fe75f72642bcb3a82656271418ba
   specs:
-    cybersourcery (0.0.3)
-      rails (~> 4.0.9)
+    cybersourcery (0.0.4)
+      rails (>= 3.1)
       ruby-hmac (~> 0.4.0)
 
 GEM
