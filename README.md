@@ -4,18 +4,19 @@ This is a Rails app for demonstrating [the Cybersourcery gem](https://github.com
 
 ## Features
 
-The Cybersourcery gem does not dictate how you build your application's checkout system. This project illustrates how to use all of the gem's features. See the gem's README for links to specific examples, or review these files in the following order for a general overview:
+The Cybersourcery gems do not dictate how you build your application's checkout system. This project illustrates how to use all of the gems' features. See the gems' README for links to specific examples, or review these files in the following order for a general overview:
 
 1. Config and setup
 
-  The gems include generators for these files.
+  The gems include generators for these files (except, of course, the routes file).
   
   ```
+  .env
   config/
     cybersourcery_profiles.yml
     initializers/
       cybersourcery.rb
-  .env
+    routes.rb
   ```
    
 2. Sample shopping cart
