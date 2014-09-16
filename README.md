@@ -6,9 +6,7 @@ This is a Rails app for demonstrating [the Cybersourcery gem](https://github.com
 
 The Cybersourcery gems do not dictate how you build your application's checkout system. This project illustrates how to use all of the gems' features. See the gems' README for links to specific examples, or review these files in the following order for a general overview:
 
-1. Config and setup
-
-  The gems include generators for these files (except, of course, the routes file).
+1. Config and setup: the Cybersourcery gem includes generators for `cybersourcery.rb` and `cybersourcery_profiles.yml`. The Cybersourcery Testing gem includes a generator for the `.env` file.
   
   ```
   .env
@@ -30,14 +28,15 @@ The Cybersourcery gems do not dictate how you build your application's checkout 
         new.html.slim
   ```
 
-3. Sample payment form
+3. Sample payment form: note that the Cybersourcery gem includes helpers for use with Simple Form, but Simple Form is not required.
 
   ```
   app/
-    javascripts/
-      payments.js.coffee
-    stylesheets/
-      payments.css.scss
+    assets/
+      javascripts/
+        payments.js.coffee
+      stylesheets/
+        payments.css.scss
     controllers/
       payments_controller.rb
     models/
@@ -49,7 +48,7 @@ The Cybersourcery gems do not dictate how you build your application's checkout 
         pay.html.slim        
   ```
 
-4. Test setup and feature specs
+4. Test setup and feature specs: these are relevant for the Cybersourcery Testing gem
 
   ```
   cybersourcery_proxy_custom.rb
