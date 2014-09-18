@@ -61,7 +61,8 @@ group :test, :development do
   gem 'selenium-webdriver', '~> 2.42.0'
   gem 'rspec-rails', '~> 3.0.0'
   gem 'dotenv-rails'
-  gem 'cybersourcery_testing', path: '/Users/toppa/Projects/cybersourcery_testing'
+  gem 'cybersourcery_testing', git: 'https://efcb6ec0daca0c95d920a44d9789ab56b3a6946c:x-oauth-basic@github.com/promptworks/cybersourcery_testing.git'
+  #gem 'cybersourcery_testing', path: '/Users/toppa/Projects/cybersourcery_testing'
 end
 
 group :test do
