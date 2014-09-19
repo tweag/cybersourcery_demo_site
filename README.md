@@ -10,6 +10,7 @@ The Cybersourcery gems do not dictate how you build your application's checkout 
   
   ```
   .env
+  Gemfile
   config/
     cybersourcery_profiles.yml
     initializers/
