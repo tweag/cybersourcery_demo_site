@@ -50,7 +50,7 @@ The Cybersourcery gems do not dictate how you build your application's checkout 
         pay.html.slim        
   ```
   
-  Note the Cybersourcery gem includes generators for `cybersourcery.rb` and `cybersourcery_profiles.yml`. The Cybersourcery Testing gem includes a generator for the `.env` file.
+  Note that the Cybersourcery gem includes helpers for use with Simple Form, but Simple Form is not required.
   
 4. Test setup and feature specs (applicable to the Cybersourcery Testing gem only):
 
