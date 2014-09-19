@@ -4,9 +4,9 @@ This is a Rails app for demonstrating [the Cybersourcery gem](https://github.com
 
 ## Features
 
-The Cybersourcery gems do not dictate how you build your application's checkout system. This project illustrates how to use all of the gems' features. See the gems' README for links to specific examples, or review these files in the following order for a general overview:
+The Cybersourcery gems do not dictate how you build your application's checkout system. You can use whichever subset of features are appropriate for your project. This demo project illustrates how to use all of the gems' features. See the gems' README for links to specific examples of the various features, or review the files listed below for a general overview:
 
-1. Config and setup: the Cybersourcery gem includes generators for `cybersourcery.rb` and `cybersourcery_profiles.yml`. The Cybersourcery Testing gem includes a generator for the `.env` file.
+1. Config and setup:
   
   ```
   .env
@@ -17,7 +17,9 @@ The Cybersourcery gems do not dictate how you build your application's checkout 
     routes.rb
   ```
    
-2. Sample shopping cart
+  The Cybersourcery gem includes generators for `cybersourcery.rb` and `cybersourcery_profiles.yml`. The Cybersourcery Testing gem includes a generator for the `.env` file.
+  
+2. Sample, super-simple shopping cart:
 
   ```
   app/
@@ -28,7 +30,7 @@ The Cybersourcery gems do not dictate how you build your application's checkout 
         new.html.slim
   ```
 
-3. Sample payment form: note that the Cybersourcery gem includes helpers for use with Simple Form, but Simple Form is not required.
+3. Sample payment form:
 
   ```
   app/
@@ -47,8 +49,10 @@ The Cybersourcery gems do not dictate how you build your application's checkout 
         error.html.slim
         pay.html.slim        
   ```
-
-4. Test setup and feature specs: these are relevant for the Cybersourcery Testing gem
+  
+  Note the Cybersourcery gem includes generators for `cybersourcery.rb` and `cybersourcery_profiles.yml`. The Cybersourcery Testing gem includes a generator for the `.env` file.
+  
+4. Test setup and feature specs (applicable to the Cybersourcery Testing gem only):
 
   ```
   cybersourcery_proxy_custom.rb
