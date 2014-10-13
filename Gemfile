@@ -49,7 +49,7 @@ gem 'bootstrap-sass', '~> 3.2.0.1'
 gem 'simple_form', '~> 3.1.0.rc2'
 gem 'pg', '~> 0.17.1'
 gem 'ruby-hmac', '~> 0.4.0'
-gem 'cybersourcery', git: 'https://github.com/promptworks/cybersourcery.git'
+gem 'cybersourcery', '>= 0.0.7'
 
 group :production do
   gem 'rails_12factor', '~> 0.0.2'
@@ -60,7 +60,7 @@ group :test, :development do
   gem 'selenium-webdriver', '~> 2.42.0'
   gem 'rspec-rails', '~> 3.0.0'
   gem 'dotenv-rails'
-  gem 'cybersourcery_testing', git: 'https://github.com/promptworks/cybersourcery_testing.git'
+  gem 'cybersourcery_testing', '>= 0.0.3'
 end
 
 group :test do
